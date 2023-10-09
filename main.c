@@ -50,7 +50,7 @@ int main()
                 modifierAEF(&monAEF);
                 break;
             case 4:
-                sauvegarderAEF(&monAEF, "nom_du_fichier.txt");
+                sauvegarderAEF(&monAEF, "/h/Desktop/Projet-AEF/nom_du_fichier.txt");
                 break;
             case 5:
                 supprimerAEF(&monAEF);
@@ -63,4 +63,7 @@ int main()
             }
         }
     }
+    // Libérez la mémoire 
+   // free(monAEF.etats);
+    //free(monAEF.transitions);
 }
