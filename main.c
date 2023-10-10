@@ -44,13 +44,13 @@ int main()
                 saisirAEF(&monAEF);
                 break;
             case 2:
-                importerAEF(&monAEF, "nom_du_fichier.txt");
+                importerAEF(&monAEF, "Fichier.txt");
                 break;
             case 3:
                 modifierAEF(&monAEF);
                 break;
             case 4:
-                sauvegarderAEF(&monAEF, "/h/Desktop/Projet-AEF/nom_du_fichier.txt");
+                sauvegarderAEF(&monAEF, "Fichier.txt");
                 break;
             case 5:
                 supprimerAEF(&monAEF);

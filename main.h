@@ -3,15 +3,15 @@
 
 // Structure pour représenter un état dans l'AEF
 struct Etat {
-    int numero; // Numéro de l'état
+    int numero; // nom de l'état
     int estFinal; // 1 si c'est un état final, 0 sinon
 };
 
 // Structure pour représenter une transition dans l'AEF
 struct Transition {
-    int etatSource;
+    char etatSource[50];
     char symbole;
-    int etatDestination;
+    char etatDestination[50];
 };
 
 // Structure pour représenter l'AEF
@@ -20,7 +20,7 @@ struct Automate {
     int nbTransitions;
     struct Etat *etats;
     struct Transition *transitions;
-    int etatInitial;
+    char etatInitial[50];
 };
 
 // Fonction pour saisir un AEF
@@ -33,16 +33,16 @@ void saisirAEF(struct Automate *aef) {
 
     // Saisie de l'état initial
     printf("Etat initial : ");
-    scanf("%d", &aef->etatInitial);
+    scanf("%s", &aef->etatInitial);
 
     // Allouer de la mémoire pour les états
-    aef->etats = malloc(aef->nbEtats * sizeof(struct Etat));
+    aef->etats =(struct Etat *) malloc(aef->nbEtats * sizeof(struct Etat));
     
     // Saisie des détails des états
     for (int i = 0; i < aef->nbEtats; i++) {
         printf("Etat %d (Tapez 1 pour etat final, 0 sinon) : ", i);
         scanf("%d", &aef->etats[i].estFinal);
-        aef->etats[i].numero = i;
+        aef->etats[i].numero= i;
     }
 
     // Saisie du nombre de transitions
@@ -50,12 +50,12 @@ void saisirAEF(struct Automate *aef) {
     scanf("%d", &aef->nbTransitions);
 
     // Allouer de la mémoire pour les transitions
-    aef->transitions = malloc(aef->nbTransitions * sizeof(struct Transition));
+    aef->transitions =(struct Transition *)malloc(aef->nbTransitions * sizeof(struct Transition));
 
     // Saisie des détails des transitions   
     for (int i = 0; i < aef->nbTransitions; i++) {
         printf("Transition %d (etat source, symbole, etat destination) : ", i);
-        scanf("%d %c %d", &aef->transitions[i].etatSource, &aef->transitions[i].symbole, &aef->transitions[i].etatDestination);
+        scanf("%s %c %s", &aef->transitions[i].etatSource, &aef->transitions[i].symbole, &aef->transitions[i].etatDestination);
     }
 
 
@@ -78,7 +78,6 @@ void modifierAEF(struct Automate *aef)
 void sauvegarderAEF(const struct Automate *aef, const char *nomFichier) {
 
     printf("Veuillez saisir l'AEF que vous souhaiter sauvegarder");
-    void saisirAEF(struct Automate &aef);
     FILE *fichier = fopen(nomFichier, "w"); // Ouvrir le fichier en mode écriture
 
     if (fichier == NULL) {
@@ -88,18 +87,18 @@ void sauvegarderAEF(const struct Automate *aef, const char *nomFichier) {
     // Écrire les informations de l'AEF dans le fichier
     fprintf(fichier, "Automate d'États Finis (AEF) :\n");
     fprintf(fichier, "Nombre d'états : %d\n", aef->nbEtats);
-    fprintf(fichier, "État initial : %d\n", aef->etatInitial);
+    fprintf(fichier, "État initial : %s\n", aef->etatInitial);
 
     fprintf(fichier, "Détails des états :\n");
     for (int i = 0; i < aef->nbEtats; i++) {
-        fprintf(fichier, "État %d (Final : %d)\n", aef->etats[i].numero, aef->etats[i].estFinal);
+        fprintf(fichier, "État q%d (Final : %d)\n", aef->etats[i].numero, aef->etats[i].estFinal);
     }
 
     fprintf(fichier, "Nombre de transitions : %d\n", aef->nbTransitions);
 
     fprintf(fichier, "Détails des transitions :\n");
     for (int i = 0; i < aef->nbTransitions; i++) {
-        fprintf(fichier, "Transition %d : État Source : %d, Symbole : %c, État Destination : %d\n",
+        fprintf(fichier, "Transition %d : État Source : %s, Symbole : %c, État Destination : %s\n",
                i, aef->transitions[i].etatSource, aef->transitions[i].symbole, aef->transitions[i].etatDestination);
     }
 
