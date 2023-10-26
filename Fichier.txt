@@ -1,9 +1,0 @@
-Automate d'États Finis (AEF) :
-Nombre d'états : 2
-État initial : q0
-Détails des états :
-État q0 (Final : 0)
-État q1 (Final : 1)
-Nombre de transitions : 1
-Détails des transitions :
-Transition 0 : État Source : q0, Symbole : a, État Destination : q1
