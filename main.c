@@ -6,6 +6,10 @@ int main()
 {
     struct Automate monAEF;
     int choice;
+    char nomAutomate[50];
+    char nomFichier[100];
+    char cheminFichier[100];
+
     while (1)
     {
         printf("------------------------------------\n\n");
@@ -28,42 +32,50 @@ int main()
         switch (choice)
         {
         case 1:
-            printf("Vous avez choisi de manipuler un AEF.\n");
-            printf("Menu :\n");
-            printf("1. Saisir un AEF\n");
-            printf("2. Importer un AEF a partir d'un fichier\n");
-            printf("3. Modifier un AEF\n");
-            printf("4. Sauvegarder un AEF dans un fichier\n");
-            printf("5. Supprimer un AEF\n");
-            printf("6. Quitter\n");
-            printf("Choisissez une option : ");
-            scanf("%d", &choice);
-            switch (choice)
+            while (1)
             {
-            case 1:
-                saisirAEF(&monAEF);
-                break;
-            case 2:
-                importerAEF(&monAEF, "Fichier.txt");
-                break;
-            case 3:
-                modifierAEF(&monAEF);
-                break;
-            case 4:
-                sauvegarderAEF(&monAEF, "Fichier.txt");
-                break;
-            case 5:
-                supprimerAEF(&monAEF);
-                break;
-            case 6:
-                printf("Au revoir !\n");
-                return 0;
-            default:
-                printf("Choix invalide. Veuillez choisir un nombre valide.\n");
+                printf("Vous avez choisi de manipuler un AEF.\n\n");
+                printf("Menu :\n");
+                printf("1. Saisir un AEF\n");
+                printf("2. Importer un AEF a partir d'un fichier\n");
+                printf("3. Modifier un AEF\n");
+                printf("4. Sauvegarder un AEF dans un fichier\n");
+                printf("5. Supprimer un AEF\n");
+                printf("6. Quitter\n\n");
+                printf("Choisissez une option : ");
+                scanf("%d", &choice);
+                switch (choice)
+                {
+                case 1:
+
+                    saisirAEF(&monAEF);
+                    break;
+                case 2:
+                    importerAEF(&monAEF, "Fichier.txt");
+                    break;
+                case 3:
+                    modifierAEF(&monAEF);
+                    break;
+                case 4:
+
+                    printf("Entrez le nom de l'automate : ");
+                    scanf("%s", nomAutomate);
+                    snprintf(cheminFichier, sizeof(cheminFichier), "%s.txt", nomAutomate);
+                    sauvegarderAEF(&monAEF, nomFichier);
+                    break;
+                case 5:
+                    supprimerAEF(&monAEF);
+                    break;
+                case 6:
+                    printf("Au revoir !\n");
+                    return 0;
+                default:
+                    printf("Choix invalide. Veuillez choisir un nombre valide.\n");
+                }
             }
         }
     }
-    // Libérez la mémoire 
-   // free(monAEF.etats);
-    //free(monAEF.transitions);
+    // Libérez la mémoire
+    // free(monAEF.etats);
+    // free(monAEF.transitions);
 }
