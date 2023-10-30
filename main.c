@@ -70,7 +70,11 @@ int main()
                     printf("Au revoir !\n");
                     return 0;
                 default:
+<<<<<<< HEAD
                     printf("Choix invalide. Veuillez choisir un nombre valide..............................................\n");
+=======
+                    printf("Choix invalide. Veuillez choisir un nombre valide.\n");
+>>>>>>> 4a8d000af494ed0ea06072a19b818b63124a0bdc
                 }
             }
         }
