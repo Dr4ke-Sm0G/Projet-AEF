@@ -39,34 +39,27 @@ int main()
                 printf("1. Saisir un AEF\n");
                 printf("2. Importer un AEF a partir d'un fichier\n");
                 printf("3. Modifier un AEF\n");
-                printf("4. Sauvegarder un AEF dans un fichier\n");
-                printf("5. Supprimer un AEF\n");
-                printf("6. Quitter\n\n");
+                printf("4. Supprimer un AEF\n");
+                printf("5. Quitter\n\n");
                 printf("Choisissez une option : ");
                 scanf("%d", &choice);
                 switch (choice)
                 {
                 case 1:
-
                     saisirAEF(&monAEF);
                     break;
                 case 2:
                     importerAEF(&monAEF, "Fichier.txt");
                     break;
                 case 3:
-                    modifierAEF(&monAEF);
+                    printf("Quel AEF souhaitez-vous modifier ?\n");
+                    scanf("%s", &nomAutomate);
+                    modifierAEF(&monAEF,nomAutomate);
                     break;
                 case 4:
-
-                    printf("Entrez le nom de l'automate : ");
-                    scanf("%s", nomAutomate);
-                    snprintf(cheminFichier, sizeof(cheminFichier), "%s.txt", nomAutomate);
-                    sauvegarderAEF(&monAEF, nomFichier);
-                    break;
-                case 5:
                     supprimerAEF(&monAEF);
                     break;
-                case 6:
+                case 5:
                     printf("Au revoir !\n");
                     return 0;
                 default:
@@ -79,3 +72,4 @@ int main()
     // free(monAEF.etats);
     // free(monAEF.transitions);
 }
+
