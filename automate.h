@@ -30,6 +30,10 @@ void initialiserAutomate(Automate *automate);
 void lectureFichier(char nom_fichier[]);
 Automate initialiserAutomateDepuisFichier(const char *nom_fichier);
 
+void creerAutomate(Automate *automate);
+void afficherAutomate(Automate *automate);
+void supprimerAutomate(Automate *automate);
+void modifierAutomate(Automate *automate);
 
 void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final);
 void ajouterSymbole(Automate *automate, char symbole);

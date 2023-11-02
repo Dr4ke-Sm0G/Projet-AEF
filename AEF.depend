@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1698941377 source:h:\desktop\cy tech\c\aef\main.c
+1698943091 source:h:\desktop\cy tech\c\aef\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -22,7 +22,7 @@
 
 1698933770 h:\desktop\cy tech\c\aef\transition.h
 
-1698941377 h:\desktop\cy tech\c\aef\automate.h
+1698943070 h:\desktop\cy tech\c\aef\automate.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -32,6 +32,6 @@
 	"symbole.h"
 	"transition.h"
 
-1698941106 source:h:\desktop\cy tech\c\aef\automate.c
+1698943187 source:h:\desktop\cy tech\c\aef\automate.c
 	"automate.h"
 

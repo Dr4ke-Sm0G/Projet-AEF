@@ -10,6 +10,8 @@ int main() {
     int choice;
     char nom_fichier[100];  // Un tableau pour stocker le nom du fichier
 
+    Automate automate;
+
     while (1) {
         menu();
 
@@ -22,18 +24,22 @@ int main() {
 
         switch (choice) {
             case 1:
+                initialiserAutomate(&automate);
+                creerAutomate(&automate);
                 break;
             case 2:
-                // Code pour l'option 2
+                afficherAutomate(&automate);
                 break;
             case 3:
-                // Code pour l'option 3
+                modifierAutomate(&automate);
                 break;
             case 4:
+                supprimerAutomate(&automate);
+                break;
+            case 5:
                 while (1) {
                     lectureFichier(nom_fichier);
 
-                    Automate automate;
                     initialiserAutomate(&automate);
 
                     automate = initialiserAutomateDepuisFichier(nom_fichier);
@@ -57,9 +63,6 @@ int main() {
                         break;  // Sortir de la boucle si l'utilisateur veut arrêter
                     }
                 }
-                break;
-            case 5:
-                // Code pour l'option 5
                 break;
             case 6:
                 // Code pour l'option 6
