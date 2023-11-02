@@ -38,7 +38,7 @@ void initialiserAutomate(Automate *automate){
     automate->transitions = NULL;
 }
 
-// Fonction pour ajouter un état à l'automate
+// Fonction pour ajouter un ï¿½tat ï¿½ l'automate
 void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final){
     automate->etats = (Etat*)realloc(automate->etats, (automate->nb_etats + 1) * sizeof(Etat));
     Etat nouvel_etat;
@@ -57,7 +57,7 @@ void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final){
     }
 }
 
-// Fonction pour ajouter un symbole à l'automate
+// Fonction pour ajouter un symbole ï¿½ l'automate
 void ajouterSymbole(Automate *automate, char symbole) {
     automate->symboles = (Symbole*)realloc(automate->symboles, (automate->nb_symboles + 1) * sizeof(Symbole));
     Symbole nouveau_symbole;
@@ -66,7 +66,7 @@ void ajouterSymbole(Automate *automate, char symbole) {
     automate->nb_symboles++;
 }
 
-// Fonction pour ajouter une transition à l'automate
+// Fonction pour ajouter une transition ï¿½ l'automate
 void ajouterTransition(Automate *automate, int etat_depuis, char symbole_entree, int etat_vers) {
     automate->transitions = (Transition*)realloc(automate->transitions, (automate->nb_transitions + 1) * sizeof(Transition));
     Transition nouvelle_transition;
@@ -77,7 +77,7 @@ void ajouterTransition(Automate *automate, int etat_depuis, char symbole_entree,
     automate->nb_transitions++;
 }
 
-// Fonction pour vérifier si un état est final
+// Fonction pour vï¿½rifier si un ï¿½tat est final
 int estEtatFinal(Automate *automate, int etat) {
     printf("\n Nbre etat fin : %d",automate->nb_etats_finaux);
     for (int i = 0; i < automate->nb_etats_finaux; i++) {
@@ -102,10 +102,10 @@ int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree
 
         }
     }
-    return -1;  // Pas de transition pour le symbole donné
+    return -1;  // Pas de transition pour le symbole donnï¿½
 }
 
-// Fonction pour vérifier si un mot est accepté par l'automate
+// Fonction pour vï¿½rifier si un mot est acceptï¿½ par l'automate
 int accepterMot(Automate *automate, const char *mot) {
     int etat_actuel = automate->etat_initial;
     printf("\n Etat initial automate : %d", automate->etat_initial);
@@ -116,7 +116,7 @@ int accepterMot(Automate *automate, const char *mot) {
 
         if (etat_actuel == -1) {
             printf("\n WWWWWIIIWWWW");
-            return 0;  // Rejeté si aucune transition possible
+            return 0;  // Rejetï¿½ si aucune transition possible
         }
     }
     printf("\n Est final ? %d",estEtatFinal(automate, etat_actuel));
@@ -134,9 +134,9 @@ Automate initialiserAutomateDepuisFichier(const char *nom_fichier) {
     }
 
     char ligne[100];
-    char *token = NULL; // Déclarez token en dehors de la boucle
+    char *token = NULL; // Dï¿½clarez token en dehors de la boucle
 
-    // Lire les états
+    // Lire les ï¿½tats
     fgets(ligne, sizeof(ligne), fichier);
     token = strtok(ligne, ",");
     while (token != NULL) {
@@ -145,7 +145,7 @@ Automate initialiserAutomateDepuisFichier(const char *nom_fichier) {
         token = strtok(NULL, ",");
     }
 
-    // Lire l'état initial
+    // Lire l'ï¿½tat initial
     fgets(ligne, sizeof(ligne), fichier);
     int etat_initial = atoi(ligne);
     for (int i = 0; i < automate.nb_etats; i++) {
@@ -156,7 +156,7 @@ Automate initialiserAutomateDepuisFichier(const char *nom_fichier) {
         }
     }
 
-    // Lire les états finaux
+    // Lire les ï¿½tats finaux
     fgets(ligne, sizeof(ligne), fichier);
     token = strtok(ligne, ",");
     while (token != NULL) {
@@ -198,66 +198,66 @@ Automate initialiserAutomateDepuisFichier(const char *nom_fichier) {
 void creerAutomate(Automate *automate) {
     int nb_etats, nb_symboles, nb_transitions;
 
-    // Demander le nombre d'états
+    // Demander le nombre d'ï¿½tats
     printf("Combien d'etats voulez-vous ajouter a l'automate ? : ");
     scanf("%d", &nb_etats);
 
     for (int i = 0; i < nb_etats; i++) {
         int etat, est_initial, est_final;
 
-        // Demander les détails de l'état
+        // Demander les dï¿½tails de l'ï¿½tat
         printf("etat %d : ", i + 1);
         scanf("%d", &etat);
 
-        // Demander si c'est un état initial (1) ou non (0)
+        // Demander si c'est un ï¿½tat initial (1) ou non (0)
         do {
             printf("Est initial (0/1) : ");
             scanf("%d", &est_initial);
         } while (est_initial != 0 && est_initial != 1);
 
-        // Demander si c'est un état final (1) ou non (0)
+        // Demander si c'est un ï¿½tat final (1) ou non (0)
         do {
             printf("Est final (0/1) : ");
             scanf("%d", &est_final);
         } while (est_final != 0 && est_final != 1);
 
-        // Ajouter l'état à l'automate
+        // Ajouter l'ï¿½tat ï¿½ l'automate
         ajouterEtat(automate, etat, est_initial, est_final);
         printf("\n BARA MRIGUEL");
     }
 
     // Demander le nombre de symboles
-    printf("Combien de Symboles voulez-vous ajouter à l'automate ? : ");
+    printf("Combien de Symboles voulez-vous ajouter ï¿½ l'automate ? : ");
     scanf("%d", &nb_symboles);
 
     for (int i = 0; i < nb_symboles; i++) {
         char symbole;
 
-        // Demander les détails du symbole
+        // Demander les dï¿½tails du symbole
         printf("Symbole %d : ", i + 1);
         scanf(" %c", &symbole); // Utilisation d'un espace pour ignorer les espaces ou les sauts de ligne
 
-        // Ajouter le symbole à l'automate
+        // Ajouter le symbole ï¿½ l'automate
         ajouterSymbole(automate, symbole);
     }
 
     // Demander le nombre de transitions
-    printf("Combien de Transitions voulez-vous ajouter à l'automate ? : ");
+    printf("Combien de Transitions voulez-vous ajouter ï¿½ l'automate ? : ");
     scanf("%d", &nb_transitions);
 
     for (int i = 0; i < nb_transitions; i++) {
         int etat_depuis, etat_vers;
         char symbole_entree;
 
-        // Demander les détails de la transition
-        printf("Transition %d - État de départ : ", i + 1);
+        // Demander les dï¿½tails de la transition
+        printf("Transition %d - ï¿½tat de dï¿½part : ", i + 1);
         scanf("%d", &etat_depuis);
         printf("Transition %d - Symbole d'entree : ", i + 1);
         scanf(" %c", &symbole_entree); // Utilisation d'un espace pour ignorer les espaces et les sauts de ligne
-        printf("Transition %d - etat d'arrivée : ", i + 1);
+        printf("Transition %d - etat d'arrivï¿½e : ", i + 1);
         scanf("%d", &etat_vers);
 
-        // Ajouter la transition à l'automate
+        // Ajouter la transition ï¿½ l'automate
         ajouterTransition(automate, etat_depuis, symbole_entree, etat_vers);
     }
 }
@@ -265,9 +265,9 @@ void creerAutomate(Automate *automate) {
 void afficherAutomate(Automate *automate) {
     printf("Automate :\n");
 
-    printf("États :\n");
+    printf("ï¿½tats :\n");
     for (int i = 0; i < automate->nb_etats; i++) {
-        printf("État %d - ID : %d, Initial : %d, Final : %d\n", i + 1, automate->etats[i].etat, automate->etats[i].est_initial, automate->etats[i].est_final);
+        printf("ï¿½tat %d - ID : %d, Initial : %d, Final : %d\n", i + 1, automate->etats[i].etat, automate->etats[i].est_initial, automate->etats[i].est_final);
     }
 
     printf("Symboles :\n");
@@ -293,7 +293,7 @@ void modifierAutomate(Automate *automate) {
     int choix;
 
     printf("Que voulez-vous modifier ?\n");
-    printf("1- Modifier les états\n");
+    printf("1- Modifier les etats\n");
     printf("2- Modifier les transitions\n");
     printf("3- Modifier les symboles\n");
 
@@ -301,7 +301,7 @@ void modifierAutomate(Automate *automate) {
 
     switch (choix) {
         case 1:
-            // Modifier les états
+            // Modifier les ï¿½tats
             // Vous pouvez appeler une fonction pour cela
             // Exemple : modifierEtats(automate);
             break;
@@ -330,7 +330,7 @@ void lectureFichier(char nom_fichier[]) {
         if (access(nom_fichier, F_OK) != -1) {
             break;  // Sortir de la boucle si le fichier existe
         } else {
-            printf("Le fichier n'existe pas. Veuillez réessayer.\n");
+            printf("Le fichier n'existe pas. Veuillez rï¿½essayer.\n");
         }
     }
 }
