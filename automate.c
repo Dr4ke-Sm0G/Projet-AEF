@@ -252,9 +252,9 @@ void creerAutomate(Automate *automate) {
         // Demander les détails de la transition
         printf("Transition %d - État de départ : ", i + 1);
         scanf("%d", &etat_depuis);
-        printf("Transition %d - Symbole d'entrée : ", i + 1);
+        printf("Transition %d - Symbole d'entree : ", i + 1);
         scanf(" %c", &symbole_entree); // Utilisation d'un espace pour ignorer les espaces et les sauts de ligne
-        printf("Transition %d - État d'arrivée : ", i + 1);
+        printf("Transition %d - etat d'arrivée : ", i + 1);
         scanf("%d", &etat_vers);
 
         // Ajouter la transition à l'automate
