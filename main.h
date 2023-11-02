@@ -20,7 +20,7 @@ struct Transition
 struct Automate
 {
     int nbEtats;
-    int nbTransitions;
+    int nbTransitions; // changer ça par symbole, il faut ajouter l'id d'automate
     struct Etat *etats;
     struct Transition *transitions;
     char etatInitial[10];
