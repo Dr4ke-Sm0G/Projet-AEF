@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1698941377 source:h:\desktop\cy tech\c\aef\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<windows.h>
+	"automate.h"
+
+1698933728 source:h:\desktop\cy tech\c\aef\etat.c
+	"etat.h"
+
+1698933730 h:\desktop\cy tech\c\aef\etat.h
+
+1698933725 source:h:\desktop\cy tech\c\aef\symbole.c
+	"symbole.h"
+
+1698933726 h:\desktop\cy tech\c\aef\symbole.h
+
+1698933768 source:h:\desktop\cy tech\c\aef\transition.c
+	"transition.h"
+
+1698933770 h:\desktop\cy tech\c\aef\transition.h
+
+1698941377 h:\desktop\cy tech\c\aef\automate.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<windows.h>
+	"etat.h"
+	"symbole.h"
+	"transition.h"
+
+1698941106 source:h:\desktop\cy tech\c\aef\automate.c
+	"automate.h"
+
