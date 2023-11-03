@@ -9,7 +9,7 @@
 int main() {
     int choice;
     char nom_fichier[100];  // Un tableau pour stocker le nom du fichier
-
+    char mot[100];
     Automate automate;
 
     while (1) {
@@ -34,9 +34,19 @@ int main() {
                 modifierAutomate(&automate);
                 break;
             case 4:
-                supprimerAutomate(&automate);
+
+                printf("\n Entrez un mot : ");
+                scanf("%s", mot);
+                if (accepterMot(&automate, mot) == 1) {
+                    printf("\n Le mot est accepté.\n");
+                } else {
+                    printf("\n Le mot est rejeté.\n");
+                }
                 break;
             case 5:
+                supprimerAutomate(&automate);
+                break;
+            case 6:
                 while (1) {
                     lectureFichier(nom_fichier);
 
@@ -46,7 +56,6 @@ int main() {
 
 
                     // Test de l'automate avec un mot
-                    char mot[100];
                     printf("\n Entrez un mot : ");
                     scanf("%s", mot);
 
@@ -63,9 +72,6 @@ int main() {
                         break;  // Sortir de la boucle si l'utilisateur veut arrêter
                     }
                 }
-                break;
-            case 6:
-                // Code pour l'option 6
                 break;
             case 7:
                 // Code pour l'option 7

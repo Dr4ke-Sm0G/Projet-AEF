@@ -27,6 +27,10 @@ void menu();
 
 void initialiserAutomate(Automate *automate);
 
+Etat* rechercherEtat(Automate *automate, int id);
+Symbole* rechercherSymbole(Automate *automate, char symbole_recherche);
+Transition* rechercherTransition(Automate *automate, int etat_depuis, char symbole_entree, int etat_vers);
+
 void lectureFichier(char nom_fichier[]);
 Automate initialiserAutomateDepuisFichier(const char *nom_fichier);
 

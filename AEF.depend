@@ -35,3 +35,39 @@
 1698943187 source:h:\desktop\cy tech\c\aef\automate.c
 	"automate.h"
 
+1698945482 source:h:\desktop\cy tech\c\projet-aef\etat.c
+	"etat.h"
+
+1698945482 h:\desktop\cy tech\c\projet-aef\etat.h
+
+1699014113 source:h:\desktop\cy tech\c\projet-aef\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<windows.h>
+	"automate.h"
+
+1699016304 h:\desktop\cy tech\c\projet-aef\automate.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<windows.h>
+	"etat.h"
+	"symbole.h"
+	"transition.h"
+
+1698945482 h:\desktop\cy tech\c\projet-aef\symbole.h
+
+1698945482 h:\desktop\cy tech\c\projet-aef\transition.h
+
+1698945482 source:h:\desktop\cy tech\c\projet-aef\symbole.c
+	"symbole.h"
+
+1698945482 source:h:\desktop\cy tech\c\projet-aef\transition.c
+	"transition.h"
+
+1699018278 source:h:\desktop\cy tech\c\projet-aef\automate.c
+	"automate.h"
+
