@@ -1,75 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <windows.h>  // Pour la fonction GetFileAttributes
 
-#include "main.h"
+#include "automate.h"
 
-int main()
-
-{
-    struct Automate monAEF;
+int main() {
     int choice;
-    char nomAutomate[50];
-    char nomFichier[100];
-    char cheminFichier[100];
+    char nom_fichier[100];  // Un tableau pour stocker le nom du fichier
+    char mot[100];
+    Automate automate;
 
-    while (1)
-    {
-        printf("------------------------------------\n\n");
-        printf("Projet Automates d'etats Finis (AEF)\n\n");
-        printf("------------------------------------\n\n");
-        printf("Que voulez-vous faire ? \n");
-        printf("1- Manipuler un AEF\n");
-        printf("2- Verifier si un mot est reconnu par un AEF\n");
-        printf("3- Verifier si un automate est complet\n");
-        printf("4- Rendre un automate complet\n");
-        printf("5- Verifier si un automate est deterministe\n");
-        printf("6- Rendre un AEF deterministe\n");
-        printf("7- Realiser des operations (Complement d'un AEF,Miroir d'un AEF,... )\n");
-        printf("8- Extraire une expression reguliere a partir un automate donne\n");
-        printf("9- Trouver le langage reconnu par un automate donne\n");
-        printf("10- Verifier si deux automates sont equivalents\n");
-        printf("11- Rendre un automate emonde\n");
-        printf("12- Rendre un automate minimal\n");
+    while (1) {
+        menu();
+        printf("Entrez votre choix : ");
         scanf("%d", &choice);
-        switch (choice)
-        {
-        case 1:
-            while (1)
-            {
-                printf("Vous avez choisi de manipuler un AEF.\n\n");
-                printf("Menu :\n");
-                printf("1. Saisir un AEF\n");
-                printf("2. Importer un AEF a partir d'un fichier\n");
-                printf("3. Modifier un AEF\n");
-                printf("4. Supprimer un AEF\n");
-                printf("5. Quitter\n\n");
-                printf("Choisissez une option : ");
-                scanf("%d", &choice);
-                switch (choice)
-                {
-                case 1:
-                    saisirAEF(&monAEF);
-                    break;
-                case 2:
-                    importerAEF(&monAEF, "Fichier.txt");
-                    break;
-                case 3:
-                    printf("Quel AEF souhaitez-vous modifier ?\n");
-                    scanf("%s", &nomAutomate);
-                    modifierAEF(&monAEF,nomAutomate);
-                    break;
-                case 4:
-                    supprimerAEF(&monAEF);
-                    break;
-                case 5:
-                    printf("Au revoir !\n");
-                    return 0;
-                default:
-                    printf("Choix invalide. Veuillez choisir un nombre valide.\n");
+        if (choice == 0) {
+            break; // Quitter la boucle si l'utilisateur choisit 0
+        }
+        switch (choice) {
+            case 0:
+                break;
+            case 1:
+                printf("Vous avez choisi de manipuler un AEF\n que voulais vous faire ensuite ?");
+                scanf("%d",choice);
+                printf("");
+                initialiserAutomate(&automate);
+                creerAutomate(&automate);
+                break;
+            case 2:
+                afficherAutomate(&automate);
+                break;
+            case 3:
+                modifierAutomate(&automate);
+                break;
+            case 4:
+
+                printf("\n Entrez un mot : ");
+                scanf("%s", mot);
+                if (accepterMot(&automate, mot) == 1) {
+                    printf("\n Le mot est accept�.\n");
+                } else {
+                    printf("\n Le mot est rejet�.\n");
                 }
-            }
+                break;
+            case 5:
+                supprimerAutomate(&automate);
+                break;
+            case 6:
+                while (1) {
+                    lectureFichier(nom_fichier);
+
+                    initialiserAutomate(&automate);
+
+                    automate = initialiserAutomateDepuisFichier(nom_fichier);
+
+
+                    // Test de l'automate avec un mot
+                    printf("\n Entrez un mot : ");
+                    scanf("%s", mot);
+
+                    if (accepterMot(&automate, mot) == 1) {
+                        printf("\n Le mot est accept�.\n");
+                    } else {
+                        printf("\n Le mot est rejet�.\n");
+                    }
+
+                    printf("Voulez-vous continuer ? (Oui/Non) : ");
+                    char reponse[10];
+                    scanf("%s", reponse);
+                    if (strcmp(reponse, "Non") == 0 || strcmp(reponse, "non") == 0) {
+                        break;  // Sortir de la boucle si l'utilisateur veut arr�ter
+                    }
+                }
+                break;
+            case 7:
+                // Code pour l'option 7
+                break;
+            case 8:
+                // Code pour l'option 8
+                break;
+            case 9:
+                // Code pour l'option 9
+                break;
+            case 10:
+                // Code pour l'option 10
+                break;
+            case 11:
+                // Code pour l'option 11
+                break;
+            case 12:
+                // Code pour l'option 12
+                break;
+            default:
+                printf("Choix non valide\n");
         }
     }
-    // Libérez la mémoire
-    // free(monAEF.etats);
-    // free(monAEF.transitions);
-}
 
+    return 0;
+}

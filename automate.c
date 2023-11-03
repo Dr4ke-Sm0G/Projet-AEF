@@ -1,0 +1,452 @@
+#include "automate.h"
+
+void menu() {
+    printf("--------------------------------------------------------\n");
+    printf("         Projet Automates d'États Finis (AEF)           \n");
+    printf("--------------------------------------------------------\n");
+    printf("Que voulez-vous faire ?\n");
+    printf("1- Manipuler un AEF\n"); // contient ajouter/supprimer / afficher / modifier / sauvegarder / récupérer un AEF depuis un fichier = importer /
+    printf("4- Vérifier un mot dans l'AEF\n");
+    printf("7- Vérifier si un mot est reconnu par un AEF\n");
+    printf("8- Vérifier si un automate est complet\n");
+    printf("9- Rendre un automate complet\n");
+    printf("10- Vérifier si un automate est déterministe\n");
+    printf("11- Rendre un AEF déterministe\n");
+    printf("12- Opérations sur les AEF (complément, miroir, etc.)\n");
+    printf("13- Extraire une expression régulière d'un automate\n");
+    printf("14- Trouver le langage reconnu par un automate\n");
+    printf("15- Vérifier si deux automates sont équivalents\n");
+    printf("16- Rendre un automate émondé\n");
+    printf("17- Rendre un automate minimal\n");
+    printf("0- Quitter\n");
+    printf("--------------------------------------------------------\n");
+}
+
+
+// Fonction pour initialiser l'automate
+void initialiserAutomate(Automate *automate){
+    automate->nb_etats = 0;
+    automate->nb_etats_finaux = 0;
+    automate->nb_symboles = 0;
+    automate->nb_transitions = 0;
+    automate->etats = NULL;
+    automate->etats_finaux = NULL;
+    automate->symboles = NULL;
+    automate->transitions = NULL;
+}
+
+
+// Fonction pour ajouter un état à l'automate
+void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final) {
+    // Vérifier si l'état existe déjà dans l'automate
+    Etat *existant = rechercherEtat(automate, etat);
+    if (existant != NULL) {
+        printf("L'etat %d existe deja dans l'automate.\n", etat);
+        return;
+    }
+
+    automate->etats = (Etat*)realloc(automate->etats, (automate->nb_etats + 1) * sizeof(Etat));
+    Etat nouvel_etat;
+    nouvel_etat.etat = etat;
+    nouvel_etat.est_initial = est_initial;
+    nouvel_etat.est_final = est_final;
+    automate->etats[automate->nb_etats] = nouvel_etat;
+    automate->nb_etats++;
+    if (est_initial) {
+        automate->etat_initial = etat;
+    }
+    if (est_final) {
+        automate->etats_finaux = (int*)realloc(automate->etats_finaux, (automate->nb_etats_finaux + 1) * sizeof(int));
+        automate->etats_finaux[automate->nb_etats_finaux] = etat;
+        automate->nb_etats_finaux++;
+    }
+}
+
+
+// Fonction pour ajouter un symbole � l'automate
+void ajouterSymbole(Automate *automate, char symbole) {
+    // Vérifier si le symbole existe déjà dans l'automate
+    if (rechercherSymbole(automate, symbole) != NULL) {
+        printf("Le symbole '%c' existe deje dans l'automate.\n", symbole);
+        return;  // Ne pas ajouter le symbole s'il existe déjà
+    }
+
+    // Ajouter le symbole s'il n'existe pas
+    automate->symboles = (Symbole*)realloc(automate->symboles, (automate->nb_symboles + 1) * sizeof(Symbole));
+    Symbole nouveau_symbole;
+    nouveau_symbole.symbole = symbole;
+    automate->symboles[automate->nb_symboles] = nouveau_symbole;
+    automate->nb_symboles++;
+}
+
+
+// Fonction pour ajouter une transition � l'automate
+void ajouterTransition(Automate *automate, int etat_depuis, char symbole_entree, int etat_vers) {
+    // Vérifier si une transition identique existe déjà
+    if (rechercherTransition(automate, etat_depuis, symbole_entree, etat_vers) != NULL) {
+        printf("La transition existe deja dans l'automate.\n");
+        return;  // Ne pas ajouter la transition si elle existe déjà
+    }
+
+    // Si la transition est unique, l'ajouter à l'automate
+    automate->transitions = (Transition*)realloc(automate->transitions, (automate->nb_transitions + 1) * sizeof(Transition));
+    Transition nouvelle_transition;
+    nouvelle_transition.etat_depuis = etat_depuis;
+    nouvelle_transition.symbole_entree = symbole_entree;
+    nouvelle_transition.etat_vers = etat_vers;
+    automate->transitions[automate->nb_transitions] = nouvelle_transition;
+    automate->nb_transitions++;
+}
+
+
+// Fonction pour v�rifier si un �tat est final
+int estEtatFinal(Automate *automate, int etat) {
+    //printf("\n Nbre etat fin : %d",automate->nb_etats_finaux);
+    for (int i = 0; i < automate->nb_etats_finaux; i++) {
+            //printf("\n test fin : %d  X  %d", automate->etats_finaux[i],etat);
+        if (automate->etats_finaux[i] == etat) {
+            //printf("\n AYA BEHY");
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// Fonction pour effectuer une transition
+int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree) {
+    //printf("\n Nbre transition : %d" , automate->nb_transitions);
+    for (int i = 0; i < automate->nb_transitions; i++) {
+            //printf("\n Transition entre : %d %c \n", etat_actuel, symbole_entree);
+            //printf("\n Transition trouve : %d %c %d \n", automate->transitions[i].etat_depuis, automate->transitions[i].symbole_entree, automate->transitions[i].etat_vers);
+        if (automate->transitions[i].etat_depuis == etat_actuel && automate->transitions[i].symbole_entree == symbole_entree) {
+            //printf("\n Tres bien vers %d",automate->transitions[i].etat_vers);
+            return automate->transitions[i].etat_vers;
+
+        }
+    }
+    return -1;  // Pas de transition pour le symbole donn�
+}
+
+// Fonction pour v�rifier si un mot est accept� par l'automate
+int accepterMot(Automate *automate, const char *mot) {
+    int etat_actuel = automate->etat_initial;
+    //printf("\n Etat initial automate : %d", automate->etat_initial);
+    //printf("\n mot[0] %c", mot[0]);
+    for (int i = 0; mot[i] != '\0'; i++) {
+        etat_actuel = effectuerTransition(automate, etat_actuel, mot[i]);
+
+
+        if (etat_actuel == -1) {
+            //printf("\n WWWWWIIIWWWW");
+            return 0;  // Rejet� si aucune transition possible
+        }
+    }
+    //printf("\n Est final ? %d",estEtatFinal(automate, etat_actuel));
+    return estEtatFinal(automate, etat_actuel);
+}
+
+Automate initialiserAutomateDepuisFichier(const char *nom_fichier) {
+    Automate automate;
+    initialiserAutomate(&automate);
+
+    FILE *fichier = fopen(nom_fichier, "r");
+    if (fichier == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        exit(1);
+    }
+
+    char ligne[100];
+    char *token = NULL; // D�clarez token en dehors de la boucle
+
+    // Lire les �tats
+    fgets(ligne, sizeof(ligne), fichier);
+    token = strtok(ligne, ",");
+    while (token != NULL) {
+        int etat = atoi(token);
+        ajouterEtat(&automate, etat, 0, 0);
+        token = strtok(NULL, ",");
+    }
+
+    // Lire l'�tat initial
+    fgets(ligne, sizeof(ligne), fichier);
+    int etat_initial = atoi(ligne);
+    for (int i = 0; i < automate.nb_etats; i++) {
+        if (automate.etats[i].etat == etat_initial) {
+            automate.etats[i].est_initial = 1;
+            automate.etat_initial = automate.etats[i].etat;
+            break;
+        }
+    }
+
+    // Lire les �tats finaux
+    fgets(ligne, sizeof(ligne), fichier);
+    token = strtok(ligne, ",");
+    while (token != NULL) {
+        int etat_final = atoi(token);
+        for (int i = 0; i < automate.nb_etats; i++) {
+            if (automate.etats[i].etat == etat_final) {
+                automate.etats[i].est_final = 1;
+                automate.etats_finaux = (int*)realloc(automate.etats_finaux, (automate.nb_etats_finaux + 1) * sizeof(int));
+                automate.etats_finaux[automate.nb_etats_finaux] = automate.etats[i].etat;
+                automate.nb_etats_finaux += 1;
+                break;
+            }
+        }
+        token = strtok(NULL, ",");
+    }
+
+    // Lire les symboles
+    fgets(ligne, sizeof(ligne), fichier);
+    token = strtok(ligne, ",");
+    while (token != NULL) {
+        char symbole = token[0];
+        ajouterSymbole(&automate, symbole);
+        token = strtok(NULL, ",");
+    }
+
+    // Lire les transitions
+    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
+        int etat_depuis, etat_vers;
+        char symbole_entree;
+        sscanf(ligne, "%d,%c,%d", &etat_depuis, &symbole_entree, &etat_vers);
+        ajouterTransition(&automate, etat_depuis, symbole_entree, etat_vers);
+    }
+
+    fclose(fichier);
+
+    return automate;
+}
+
+void creerAutomate(Automate *automate) {
+    int nb_etats, nb_symboles, nb_transitions;
+    Etat *existant;
+    int aumoinsInitial = 0;
+
+    // Demander le nombre d'�tats
+    printf("Combien d'etats voulez-vous ajouter a l'automate ? : ");
+    scanf("%d", &nb_etats);
+    do{
+    for (int i = 0; i < nb_etats; i++) {
+        int etat, est_initial, est_final;
+
+        if((i==nb_etats-1) && (aumoinsInitial==0))
+        {
+            printf("\n C'est le dernier a ajouter. Dans un AEF, il faut toujours avoir au moins un etat initial\n");
+        }
+
+        do{
+        // Demander les d�tails de l'�tat
+        printf("etat %d : ", i + 1);
+        scanf("%d", &etat);
+        existant = rechercherEtat(automate, etat);
+        if (existant != NULL) {
+            printf("L'etat %d existe deja dans l'automate.\n", etat);
+        }
+        }while (existant != NULL);
+
+        // Demander si c'est un �tat initial (1) ou non (0)
+        do {
+            printf("Est initial (1 : si oui/ 0 : sinon) : ");
+            scanf("%d", &est_initial);
+            if(est_initial==1){
+                aumoinsInitial=1;
+            }
+        } while (est_initial != 0 && est_initial != 1);
+
+        // Demander si c'est un �tat final (1) ou non (0)
+        do {
+            printf("Est final (1 : si oui/ 0 : sinon) : ");
+            scanf("%d", &est_final);
+        } while (est_final != 0 && est_final != 1);
+
+        // Ajouter l'�tat � l'automate
+        ajouterEtat(automate, etat, est_initial, est_final);
+    }
+    }while(aumoinsInitial==0);
+
+    // Demander le nombre de symboles
+    printf("Combien de Symboles voulez-vous ajouter a l'automate ? : ");
+    scanf("%d", &nb_symboles);
+
+    for (int i = 0; i < nb_symboles; i++) {
+        char symbole;
+        do{
+        // Demander les d�tails du symbole
+        printf("Symbole %d : ", i + 1);
+        scanf(" %c", &symbole); // Utilisation d'un espace pour ignorer les espaces ou les sauts de ligne
+
+        if (rechercherSymbole(automate, symbole) != NULL) {
+            printf("Le symbole '%c' existe deja dans l'automate.\n", symbole);
+        }
+        }while(rechercherSymbole(automate, symbole) != NULL);
+
+        // Ajouter le symbole � l'automate
+        ajouterSymbole(automate, symbole);
+    }
+
+    // Demander le nombre de transitions
+    printf("Combien de Transitions voulez-vous ajouter a l'automate ? : ");
+    scanf("%d", &nb_transitions);
+
+    for (int i = 0; i < nb_transitions; i++) {
+        int etat_depuis, etat_vers;
+        char symbole_entree;
+
+        do{
+        // Demander les d�tails de la transition
+        printf("Transition %d - etat de depart : ", i + 1);
+        scanf("%d", &etat_depuis);
+        printf("Transition %d - Symbole d'entree : ", i + 1);
+        scanf(" %c", &symbole_entree); // Utilisation d'un espace pour ignorer les espaces et les sauts de ligne
+        printf("Transition %d - etat d'arrivee : ", i + 1);
+        scanf("%d", &etat_vers);
+
+        if (rechercherTransition(automate, etat_depuis, symbole_entree, etat_vers) != NULL) {
+            printf("La transition existe deja dans l'automate.\n");
+        }
+        }while(rechercherTransition(automate, etat_depuis, symbole_entree, etat_vers) != NULL);
+
+        // Ajouter la transition � l'automate
+        ajouterTransition(automate, etat_depuis, symbole_entree, etat_vers);
+    }
+}
+
+void afficherAutomate(Automate *automate) {
+    printf("Automate :\n");
+
+    printf("�tats :\n");
+    for (int i = 0; i < automate->nb_etats; i++) {
+        printf("�tat %d - ID : %d, Initial : %d, Final : %d\n", i + 1, automate->etats[i].etat, automate->etats[i].est_initial, automate->etats[i].est_final);
+    }
+
+    printf("Symboles :\n");
+    for (int i = 0; i < automate->nb_symboles; i++) {
+        printf("Symbole %d - %c\n", i + 1, automate->symboles[i].symbole);
+    }
+
+    printf("Transitions :\n");
+    for (int i = 0; i < automate->nb_transitions; i++) {
+        printf("Transition %d - De : %d, Symbole : %c, Vers : %d\n", i + 1, automate->transitions[i].etat_depuis, automate->transitions[i].symbole_entree, automate->transitions[i].etat_vers);
+    }
+}
+
+void supprimerAutomate(Automate *automate) {
+    free(automate->etats);
+    free(automate->etats_finaux);
+    free(automate->symboles);
+    free(automate->transitions);
+    initialiserAutomate(automate);
+}
+
+Etat* rechercherEtat(Automate *automate, int id) {
+    for (int i = 0; i < automate->nb_etats; i++) {
+        if (automate->etats[i].etat == id) {
+            return &(automate->etats[i]);  // Retourne un pointeur vers l'état trouvé
+        }
+    }
+    return NULL;  // L'état n'a pas été trouvé
+}
+
+Symbole* rechercherSymbole(Automate *automate, char symbole_recherche) {
+    for (int i = 0; i < automate->nb_symboles; i++) {
+        if (automate->symboles[i].symbole == symbole_recherche) {
+            return &(automate->symboles[i]);
+        }
+    }
+    return NULL;  // Symbole non trouvé
+}
+
+Transition* rechercherTransition(Automate *automate, int etat_depuis, char symbole_entree, int etat_vers) {
+    for (int i = 0; i < automate->nb_transitions; i++) {
+        Transition *transition = &automate->transitions[i];
+        if (transition->etat_depuis == etat_depuis && transition->symbole_entree == symbole_entree && transition->etat_vers == etat_vers) {
+            return transition;  // Retourner la transition si elle est trouvée
+        }
+    }
+    return NULL;  // Retourner NULL si la transition n'est pas trouvée
+}
+
+
+void modifierEtat(Automate *automate) {
+    int id_etat;
+    Etat *etat_a_modifier;
+    do {
+        printf("Entrez le numero de l'etat a modifier : ");
+        scanf("%d", &id_etat);
+        etat_a_modifier = rechercherEtat(automate, id_etat);
+        if (etat_a_modifier == NULL) {
+            printf("L'etat avec le numéro %d n'existe pas dans l'automate. Veuillez reessayer.\n", id_etat);
+        }
+    } while (etat_a_modifier == NULL);
+
+    int choix;
+    do {
+        printf("Que voulez-vous faire avec l'etat %d ?\n", id_etat);
+        printf("1- Le rendre non final (s'il est final)\n");
+        printf("2- Le rendre final (s'il n'est pas final)\n");
+        scanf("%d", &choix);
+    } while (choix != 1 && choix != 2);
+
+    // Modifier l'état en conséquence
+    if (choix == 1) {
+        // Le rendre non final
+        if (etat_a_modifier->est_final) {
+            etat_a_modifier->est_final = 0;
+            printf("L'etat %d a ete rendu non final.\n", id_etat);
+        } else {
+            printf("L'etat %d n'etait pas final, donc il n'a pas ete modifie.\n", id_etat);
+        }
+    } else if (choix == 2) {
+        // Le rendre final
+        if (!etat_a_modifier->est_final) {
+            etat_a_modifier->est_final = 1;
+            printf("L'etat %d a ete rendu final.\n", id_etat);
+        } else {
+            printf("L'etat %d etait deja final, donc il n'a pas ete modifie.\n", id_etat);
+        }
+    }
+}
+
+void modifierAutomate(Automate *automate) {
+    int choix;
+
+    printf("Que voulez-vous modifier ?\n");
+    printf("1- Modifier les etats\n");
+    printf("2- Modifier les transitions\n");
+    printf("3- Modifier les symboles\n");
+
+    scanf("%d", &choix);
+
+    switch (choix) {
+        case 1:
+            modifierEtat(automate);
+            break;
+        case 2:
+            // Modifier les transitions
+            // Vous pouvez appeler une fonction pour cela
+            // Exemple : modifierTransitions(automate);
+            break;
+        case 3:
+            // Modifier les symboles
+            // Vous pouvez appeler une fonction pour cela
+            // Exemple : modifierSymboles(automate);
+            break;
+        default:
+            printf("Choix invalide.\n");
+    }
+}
+
+
+
+void lectureFichier(char nom_fichier[]) {
+    while (1) {
+        printf("Entrez le nom du fichier : ");
+        scanf("%s", nom_fichier);
+
+        if (access(nom_fichier, F_OK) != -1) {
+            break;  // Sortir de la boucle si le fichier existe
+        } else {
+            printf("Le fichier n'existe pas. Veuillez reessayer.\n");
+        }
+    }
+}
