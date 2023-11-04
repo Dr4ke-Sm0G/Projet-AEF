@@ -23,7 +23,8 @@ typedef struct {
     int nb_transitions;
 } Automate;
 
-void menu();
+void menuPrincipal();
+void menuManipuler();
 
 void initialiserAutomate(Automate *automate);
 
@@ -38,6 +39,7 @@ void creerAutomate(Automate *automate);
 void afficherAutomate(Automate *automate);
 void supprimerAutomate(Automate *automate);
 void modifierAutomate(Automate *automate);
+void sauvegarderAutomate(Automate *automate);
 
 void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final);
 void ajouterSymbole(Automate *automate, char symbole);
