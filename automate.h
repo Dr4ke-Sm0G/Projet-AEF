@@ -49,4 +49,6 @@ int estEtatFinal(Automate *automate, int etat);
 int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree);
 int accepterMot(Automate *automate, const char *mot);
 
+void modifierTransition(Automate *automate);
+
 #endif // AUTOMATE_H_INCLUDED

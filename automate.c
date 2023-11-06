@@ -431,9 +431,7 @@ void modifierAutomate(Automate *automate) {
             modifierEtat(automate);
             break;
         case 2:
-            // Modifier les transitions
-            // Vous pouvez appeler une fonction pour cela
-            // Exemple : modifierTransitions(automate);
+            modifierTransition(automate);
             break;
         case 3:
             // Modifier les symboles
