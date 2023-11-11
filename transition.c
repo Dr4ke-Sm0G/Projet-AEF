@@ -89,7 +89,7 @@ void modifierTransition(Automate *automate)
             scanf("%d", &etat_vers);
 
             ajouterTransition(automate, etat_depuis, symbole_entree, etat_vers);
-
+            afficherAutomate(automate);
             printf("Nouvelle transition ajoutee avec succes.\n");
             break;
         }
@@ -99,5 +99,14 @@ void modifierTransition(Automate *automate)
             printf("Choix invalide. Veuillez choisir une option valide.\n");
             break;
     }
+     // Demander à l'utilisateur s'il souhaite sauvegarder
+    printf("Voulez-vous sauvegarder les modifications ? (O/N) ");
+    scanf(" %c", &choix);
 
+    if (choix == 'O') {
+        // Appeler la fonction de sauvegarde ici
+        sauvegarderAutomate(automate);
+        printf("Automate sauvegarde avec succes.\n");
+    }
+    else return;
 }

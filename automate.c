@@ -222,7 +222,7 @@ Automate initialiserAutomateDepuisFichier(const char *nom_fichier) {
     }
 
     fclose(fichier);
-
+    
     return automate;
 }
 
@@ -330,7 +330,7 @@ void afficherAutomate(Automate *automate) {
 
     printf("Symboles :\n");
     for (int i = 0; i < automate->nb_symboles; i++) {
-        printf("Symbole %d - %c\n", i + 1, automate->symboles[i].symbole);
+        printf("Symbole %d - %c\n", i + 1, automate->transitions[i].symbole_entree);
     }
 
     printf("Transitions :\n");
@@ -358,7 +358,7 @@ Etat* rechercherEtat(Automate *automate, int id) {
 
 Symbole* rechercherSymbole(Automate *automate, char symbole_recherche) {
     for (int i = 0; i < automate->nb_symboles; i++) {
-        if (automate->symboles[i].symbole == symbole_recherche) {
+        if (automate->transitions[i].symbole_entree == symbole_recherche) {
             return &(automate->symboles[i]);
         }
     }
@@ -388,16 +388,17 @@ void modifierEtat(Automate *automate) {
         }
     } while (etat_a_modifier == NULL);
 
-    int choix;
+    int choix1;
+    char choix2;
     do {
         printf("Que voulez-vous faire avec l'etat %d ?\n", id_etat);
         printf("1- Le rendre non final (s'il est final)\n");
         printf("2- Le rendre final (s'il n'est pas final)\n");
-        scanf("%d", &choix);
-    } while (choix != 1 && choix != 2);
+        scanf("%d", &choix1);
+    } while (choix1 != 1 && choix1 != 2);
 
     // Modifier l'etat en consequence
-    if (choix == 1) {
+if (choix1 == 1) {
         // Le rendre non final
         if (etat_a_modifier->est_final) {
             etat_a_modifier->est_final = 0;
@@ -405,7 +406,7 @@ void modifierEtat(Automate *automate) {
         } else {
             printf("L'etat %d n'etait pas final, donc il n'a pas ete modifie.\n", id_etat);
         }
-    } else if (choix == 2) {
+    } else if (choix1 == 2) {
         // Le rendre final
         if (!etat_a_modifier->est_final) {
             etat_a_modifier->est_final = 1;
@@ -414,6 +415,18 @@ void modifierEtat(Automate *automate) {
             printf("L'etat %d etait deja final, donc il n'a pas ete modifie.\n", id_etat);
         }
     }
+
+    // Demander à l'utilisateur s'il souhaite sauvegarder
+    printf("Voulez-vous sauvegarder les modifications ? (O/N) ");
+    scanf(" %c", &choix2);
+
+    if (choix2 == 'O') {
+        // Appeler la fonction de sauvegarde ici
+        sauvegarderAutomate(automate);
+        printf("Automate sauvegarde avec succes.\n");
+    }
+    else 
+        return;
 }
 
 void modifierAutomate(Automate *automate) {
@@ -422,7 +435,6 @@ void modifierAutomate(Automate *automate) {
     printf("Que voulez-vous modifier ?\n");
     printf("1- Modifier les etats\n");
     printf("2- Modifier les transitions\n");
-    printf("3- Modifier les symboles\n");
 
     scanf("%d", &choix);
 
@@ -432,11 +444,6 @@ void modifierAutomate(Automate *automate) {
             break;
         case 2:
             modifierTransition(automate);
-            break;
-        case 3:
-            // Modifier les symboles
-            // Vous pouvez appeler une fonction pour cela
-            // Exemple : modifierSymboles(automate);
             break;
         default:
             printf("Choix invalide.\n");
@@ -457,7 +464,6 @@ void lectureFichier(char nom_fichier[]) {
         }
     }
 }
-
 void sauvegarderAutomate(Automate *automate) {
     char nom_fichier[100];
     printf("Entrez le nom du fichier de sauvegarde : ");
@@ -480,21 +486,28 @@ void sauvegarderAutomate(Automate *automate) {
     fprintf(fichier, "\n");
 
     // Ecrire les Etats initiaux
-    fprintf(fichier, "%d\n", automate->etat_initial);
+    for (int i = 0; i < automate->nb_etats; i++) {
+        if (automate->etats[i].est_initial) {
+            fprintf(fichier, "%d", automate->etats[i].etat);
+        }
+        if (i < automate->etats[i].est_initial - 1) {
+            fprintf(fichier, ",");
+        }
+        
+    }
+    fprintf(fichier, "\n");
 
     // Ecrire les Etats finaux
-
-    for (int i = 0; i < automate->nb_etats_finaux; i++) {
-        fprintf(fichier, "%d", automate->etats_finaux[i]);
-        if (i < automate->nb_etats_finaux - 1) {
-            fprintf(fichier, ",");
+    for (int i = 0; i < automate->nb_etats; i++) {
+        if (automate->etats[i].est_final) {
+            fprintf(fichier, "%d,", automate->etats[i].etat);
         }
     }
     fprintf(fichier, "\n");
 
     // Ecrire les symboles
     for (int i = 0; i < automate->nb_symboles; i++) {
-        fprintf(fichier, "%c", automate->symboles[i].symbole);
+        fprintf(fichier, "%c", automate->transitions[i].symbole_entree);
         if (i < automate->nb_symboles - 1) {
             fprintf(fichier, ",");
         }
@@ -504,7 +517,7 @@ void sauvegarderAutomate(Automate *automate) {
     // Ecrire les transitions
     for (int i = 0; i < automate->nb_transitions; i++) {
         fprintf(fichier, "%d,%c,%d\n", automate->transitions[i].etat_depuis,
-                automate->symboles[i].symbole, automate->transitions[i].etat_vers);
+                automate->transitions[i].symbole_entree, automate->transitions[i].etat_vers);
     }
 
     fclose(fichier);
