@@ -330,7 +330,7 @@ void afficherAutomate(Automate *automate) {
 
     printf("Symboles :\n");
     for (int i = 0; i < automate->nb_symboles; i++) {
-        printf("Symbole %d - %c\n", i + 1, automate->transitions[i].symbole_entree);
+        printf("Symbole %d - %c\n", i + 1, automate->symboles[i].symbole);
     }
 
     printf("Transitions :\n");
@@ -358,7 +358,7 @@ Etat* rechercherEtat(Automate *automate, int id) {
 
 Symbole* rechercherSymbole(Automate *automate, char symbole_recherche) {
     for (int i = 0; i < automate->nb_symboles; i++) {
-        if (automate->transitions[i].symbole_entree == symbole_recherche) {
+        if (automate->symboles[i].symbole == symbole_recherche) {
             return &(automate->symboles[i]);
         }
     }

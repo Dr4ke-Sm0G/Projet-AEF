@@ -47,6 +47,7 @@ void modifierTransition(Automate *automate)
             printf("3- Modifier l'etat d'arrivee\n");
             printf("4- Supprimer la transition\n");
             printf("5- Quitter\n");
+            printf("Entrez votre choix : ");
             scanf("%d", &choix);
         } while (choix < 1 || choix > 5);
         switch (choix)
@@ -89,7 +90,6 @@ void modifierTransition(Automate *automate)
             scanf("%d", &etat_vers);
 
             ajouterTransition(automate, etat_depuis, symbole_entree, etat_vers);
-            afficherAutomate(automate);
             printf("Nouvelle transition ajoutee avec succes.\n");
             break;
         }
