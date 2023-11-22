@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <windows.h>
+#include <stdbool.h>
 
 #include "etat.h"
 #include "symbole.h"
@@ -23,7 +24,8 @@ typedef struct {
     int nb_transitions;
 } Automate;
 
-void menu();
+void menuPrincipal();
+void menuManipuler();
 
 void initialiserAutomate(Automate *automate);
 
@@ -38,6 +40,7 @@ void creerAutomate(Automate *automate);
 void afficherAutomate(Automate *automate);
 void supprimerAutomate(Automate *automate);
 void modifierAutomate(Automate *automate);
+void sauvegarderAutomate(Automate *automate);
 
 void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final);
 void ajouterSymbole(Automate *automate, char symbole);
@@ -46,5 +49,15 @@ void ajouterTransition(Automate *automate, int etat_depuis, char symbole_entree,
 int estEtatFinal(Automate *automate, int etat);
 int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree);
 int accepterMot(Automate *automate, const char *mot);
+
+void modifierTransition(Automate *automate);
+
+bool estAutomateComplet(Automate *automate);
+void rendreAutomateComplet(Automate *automate);
+
+bool estAutomateDeterministe(Automate *automate);
+void rendreAutomateDeterministe(Automate *automate);
+
+
 
 #endif // AUTOMATE_H_INCLUDED
