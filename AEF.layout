@@ -2,34 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="automate.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="18936" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="transition.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4149" topLine="82" />
-		</Cursor>
-	</File>
 	<File name="automate.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1650" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="transition.h" open="1" top="1" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="258" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="etat.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="244" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="362" topLine="0" />
+			<Cursor1 position="185" topLine="3" />
 		</Cursor>
 	</File>
 	<File name="etat.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -37,9 +12,59 @@
 			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1016" topLine="22" />
+		</Cursor>
+	</File>
+	<File name="transition.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="181" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="symbole.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="111" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="etat.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="244" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="automate.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7176" topLine="48" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+			<Collapse line="23" />
+			<Collapse line="36" />
+			<Collapse line="76" />
+			<Collapse line="93" />
+			<Collapse line="112" />
+			<Collapse line="125" />
+			<Collapse line="140" />
+			<Collapse line="229" />
+			<Collapse line="258" />
+			<Collapse line="267" />
+			<Collapse line="273" />
+			<Collapse line="346" />
+			<Collapse line="365" />
+			<Collapse line="373" />
+			<Collapse line="382" />
+			<Collapse line="391" />
+			<Collapse line="402" />
+			<Collapse line="455" />
+			<Collapse line="478" />
+			<Collapse line="490" />
+			<Collapse line="551" />
+			<Collapse line="577" />
+		</Folding>
+	</File>
+	<File name="transition.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="148" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

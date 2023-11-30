@@ -1,4 +1,5 @@
 #include "automate.h"
+#include "tabAutomates.h"
 #include <stdbool.h>
 
 void menuPrincipal() {
@@ -54,6 +55,8 @@ void ajouterEtat(Automate *automate, int etat, int est_initial, int est_final) {
         printf("L'etat %d existe deja dans l'automate.\n", etat);
         return;
     }
+
+
 
     automate->etats = (Etat*)realloc(automate->etats, (automate->nb_etats + 1) * sizeof(Etat));
     Etat nouvel_etat;
@@ -577,10 +580,12 @@ bool estAutomateComplet(Automate *automate) {
 
 void rendreAutomateComplet(Automate *automate) {
 
+
     if(estAutomateComplet(automate))
     {
         printf("\nL'automate est deja complet");
     }
+
     else{
         ajouterEtat(automate,0,0,0);
         for(int m=0; m<automate->nb_symboles; m++)
@@ -600,8 +605,6 @@ void rendreAutomateComplet(Automate *automate) {
                         break;
                     }
                 }
-
-                // Si aucune transition n'est trouvée, l'automate n'est pas complet
                 if (!transitionTrouvee) {
                     ajouterTransition(automate,automate->etats[i].etat,automate->symboles[j].symbole,0);
                 }

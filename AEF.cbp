@@ -46,6 +46,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="symbole.h" />
+		<Unit filename="tabAutomates.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="tabAutomates.h" />
 		<Unit filename="transition.c">
 			<Option compilerVar="CC" />
 		</Unit>

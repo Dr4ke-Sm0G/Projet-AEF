@@ -13,6 +13,7 @@
 #include "transition.h"
 
 typedef struct {
+    int id;
     Etat *etats;
     int nb_etats;
     int etat_initial;

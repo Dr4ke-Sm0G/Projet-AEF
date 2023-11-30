@@ -40,15 +40,16 @@
 
 1699722489 h:\desktop\cy tech\c\projet-aef\etat.h
 
-1700641388 source:h:\desktop\cy tech\c\projet-aef\main.c
+1701250758 source:h:\desktop\cy tech\c\projet-aef\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<unistd.h>
 	<windows.h>
 	"automate.h"
+	"tabAutomates.h"
 
-1700641377 h:\desktop\cy tech\c\projet-aef\automate.h
+1701247874 h:\desktop\cy tech\c\projet-aef\automate.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -69,7 +70,16 @@
 1699722573 source:h:\desktop\cy tech\c\projet-aef\transition.c
 	"automate.h"
 
-1700640769 source:h:\desktop\cy tech\c\projet-aef\automate.c
+1701250252 source:h:\desktop\cy tech\c\projet-aef\automate.c
 	"automate.h"
+	"tabAutomates.h"
+	<stdbool.h>
+
+1701251494 h:\desktop\cy tech\c\projet-aef\tabautomates.h
+	"automate.h"
+	<stdbool.h>
+
+1701251493 source:h:\desktop\cy tech\c\projet-aef\tabautomates.c
+	"tabAutomates.h"
 	<stdbool.h>
 

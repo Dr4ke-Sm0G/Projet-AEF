@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <windows.h> // Pour la fonction GetFileAttributes
 #include "automate.h"
+#include "tabAutomates.h"
 
 int main()
 {
@@ -11,6 +12,9 @@ int main()
     char nom_fichier[100];
     char mot[100];
     Automate automate;
+    TableauAutomates tab;
+    initialiserTableauAutomates(&tab);
+    int id;
 
     while (1)
     {
@@ -32,41 +36,35 @@ int main()
             case 1:
                 initialiserAutomate(&automate);
                 creerAutomate(&automate);
+                ajouterAutomateTab(&tab, automate);
+
                 break;
             case 2:
+                lectureFichier(nom_fichier);
+                initialiserAutomate(&automate);
 
-                    lectureFichier(nom_fichier);
-                    initialiserAutomate(&automate);
-
-                    automate = initialiserAutomateDepuisFichier(nom_fichier);
-                    /*
-                    printf("\n Entrez un mot : ");
-                    scanf("%s", mot);
-                    if (accepterMot(&automate, mot) == 1)
-                    {
-                        printf("\n Le mot est accepte.\n");
-                    }
-                    else
-                    {
-                        printf("\n Le mot est rejete.\n");
-                    }
-                    printf("Voulez-vous continuer ? (Oui/Non) : ");
-                    char reponse[10];
-                    scanf("%s", reponse);
-                    if (strcmp(reponse, "Non") == 0 || strcmp(reponse, "non") == 0)
-                    {
-                        break;
-                    }*/
-
-
+                automate = initialiserAutomateDepuisFichier(nom_fichier);
+                ajouterAutomateTab(&tab, automate);
                 break;
             case 3:
+                afficherNbrAutomate(&tab);
+                printf("\n Donner le numero de l'automate ");
+                scanf("%d",&id);
+                automate=rechercherAutomate(&tab,id);
                 modifierAutomate(&automate);
                 break;
             case 4:
+                afficherNbrAutomate(&tab);
+                printf("\n Donner le numero de l'automate ");
+                scanf("%d",&id);
+                automate=rechercherAutomate(&tab,id);
                 sauvegarderAutomate(&automate);
                 break;
             case 5:
+                afficherNbrAutomate(&tab);
+                printf("\n Donner le numero de l'automate ");
+                scanf("%d",&id);
+                automate=rechercherAutomate(&tab,id);
                 supprimerAutomate(&automate);
                 break;
             case 6:
@@ -75,6 +73,11 @@ int main()
             case 7:
                 break;
             case 8:
+                printf("\n -- Affichage Automate -- \n");
+                afficherNbrAutomate(&tab);
+                printf("\n Donner le numero de l'automate ");
+                scanf("%d",&id);
+                automate=rechercherAutomate(&tab,id);
                 afficherAutomate(&automate);
                 break;
             default:
@@ -84,6 +87,12 @@ int main()
             break;
 
         case 2:
+            printf("\n -- Choix de l'automate --\n");
+            afficherNbrAutomate(&tab);
+            printf("\n Donner le numero de l'automate ");
+            scanf("%d",&id);
+            automate=rechercherAutomate(&tab,id);
+            printf("\n -- Verification d'un mot --\n");
             printf("\n Entrez un mot : ");
             scanf("%s", mot);
             if (accepterMot(&automate, mot) == 1)
@@ -96,12 +105,13 @@ int main()
             }
             break;
 
-        default:
-            printf("Choix invalide. Veuillez choisir un nombre valide.\n");
-            break;
-
-
         case 3:
+            printf("\n -- Choix de l'automate --\n");
+            afficherNbrAutomate(&tab);
+            printf("\n Donner le numero de l'automate ");
+            scanf("%d",&id);
+            automate=rechercherAutomate(&tab,id);
+            printf("\n -- Verification si l'automate est complet --\n");
             if (estAutomateComplet(&automate)) {
                     printf("L'automate est complet.\n");
                 } else {
@@ -110,10 +120,26 @@ int main()
             break;
 
         case 4:
+            printf("\n -- Choix de l'automate --\n");
+            afficherNbrAutomate(&tab);
+            printf("\n Donner le numero de l'automate ");
+            scanf("%d",&id);
+            automate=rechercherAutomate(&tab,id);
+            afficherAutomate(&automate);
+            printf("\n -- Rendre l'automate complet --\n");
+            printf("\n--------------------\n");
             rendreAutomateComplet(&automate);
+            remplacerAutomate(&tab, id-1, automate);
+            printf("L'automate est complet.\n");
             break;
 
         case 5:
+            printf("\n -- Choix de l'automate --\n");
+            afficherNbrAutomate(&tab);
+            printf("\n Donner le numero de l'automate ");
+            scanf("%d",&id);
+            automate=rechercherAutomate(&tab,id);
+            printf("\n -- Verification si l'automate est deterministe --\n");
             if (estAutomateDeterministe(&automate)) {
                     printf("L'automate est deterministe.\n");
                 } else {
@@ -122,7 +148,17 @@ int main()
             break;
 
         case 6:
+            printf("\n -- Choix de l'automate --\n");
+            afficherNbrAutomate(&tab);
+            printf("\n Donner le numero de l'automate ");
+            scanf("%d",&id);
+            automate=rechercherAutomate(&tab,id);
+            printf("\n -- Rendre l'automate deterministe --\n");
             rendreAutomateDeterministe(&automate);
+            remplacerAutomate(&tab, id-1, automate);
+            break;
+        default:
+            printf("Choix invalide. Veuillez choisir un nombre valide.\n");
             break;
         }
     }
