@@ -6,12 +6,14 @@
 #include <string.h>
 #include <unistd.h>
 #include <windows.h>
+#include <stdbool.h>
 
 #include "etat.h"
 #include "symbole.h"
 #include "transition.h"
 
 typedef struct {
+    int id;
     Etat *etats;
     int nb_etats;
     int etat_initial;
@@ -50,5 +52,13 @@ int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree
 int accepterMot(Automate *automate, const char *mot);
 
 void modifierTransition(Automate *automate);
+
+bool estAutomateComplet(Automate *automate);
+void rendreAutomateComplet(Automate *automate);
+
+bool estAutomateDeterministe(Automate *automate);
+void rendreAutomateDeterministe(Automate *automate);
+
+
 
 #endif // AUTOMATE_H_INCLUDED
