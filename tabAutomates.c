@@ -52,3 +52,15 @@ void supprimerAutomateTab(TableauAutomates *tableau, int index) {
     tableau->nb_automates--;
     tableau->automates = realloc(tableau->automates, tableau->nb_automates * sizeof(Automate));
 }
+
+int trouverProchainId(TableauAutomates *tableau) {
+    int maxId = 0;
+    for (int i = 0; i < tableau->nb_automates; ++i) {
+        for (int j = 0; j < tableau->automates[i].nb_etats; ++j) {
+            if (tableau->automates[i].etats[j].etat > maxId) {
+                maxId = tableau->automates[i].etats[j].etat;
+            }
+        }
+    }
+    return maxId + 1;
+}

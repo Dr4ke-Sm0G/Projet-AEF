@@ -65,7 +65,7 @@ void modifierTransition(Automate *automate)
             scanf("%d", &transition_a_modifier->etat_vers);
             break;
         case 4:
-            // Supprimer la transition en la rempla�ant par la derniere transition de l'automate
+            // Supprimer la transition en la remplacant par la derniere transition de l'automate
             *transition_a_modifier = automate->transitions[automate->nb_transitions - 1];
             automate->nb_transitions--;
             printf("La transition a ete supprimee.\n");
@@ -99,7 +99,7 @@ void modifierTransition(Automate *automate)
             printf("Choix invalide. Veuillez choisir une option valide.\n");
             break;
     }
-     // Demander � l'utilisateur s'il souhaite sauvegarder
+     // Demander a l'utilisateur s'il souhaite sauvegarder
     printf("Voulez-vous sauvegarder les modifications ? (O/N) ");
     scanf(" %c", &choix);
 

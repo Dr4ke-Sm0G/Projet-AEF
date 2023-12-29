@@ -23,10 +23,13 @@ typedef struct {
     int nb_symboles;
     Transition *transitions;
     int nb_transitions;
+    char* expression_actuelle;
+    int etat_courant;
 } Automate;
 
 void menuPrincipal();
 void menuManipuler();
+void menuOperations();
 
 void initialiserAutomate(Automate *automate);
 
@@ -59,6 +62,13 @@ void rendreAutomateComplet(Automate *automate);
 bool estAutomateDeterministe(Automate *automate);
 void rendreAutomateDeterministe(Automate *automate);
 
+
+// char* construireExpression(Automate *automate);
+// char* extraireExpressionsRegulieres(Automate *automate);
+
+void completerAutomate(Automate *automate);
+void miroirAutomate(Automate *automate);
+void produitAutomates(Automate *automateA, Automate *automateB, Automate *produit);
 
 
 #endif // AUTOMATE_H_INCLUDED
