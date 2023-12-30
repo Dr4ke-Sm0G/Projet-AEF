@@ -509,3 +509,204 @@ void sauvegarderAutomate(Automate *automate) {
 
     fclose(fichier);
 }
+
+
+
+
+//------------------------------------QUESTION-12------------------------------
+
+
+//-----------------------------------------------------ETAPE-1-------------------------
+// Marquer les états atteignables
+void marquerEtatsAtteignables(Automate *automate, int etat_actuel, int *etatsAtteignables) {
+    if (etatsAtteignables[etat_actuel] == 1)
+        return;
+
+    etatsAtteignables[etat_actuel] = 1;
+
+    for (int i = 0; i < automate->nb_transitions; i++) {
+        if (automate->transitions[i].etat_depuis == etat_actuel) {
+            marquerEtatsAtteignables(automate, automate->transitions[i].etat_vers, etatsAtteignables);
+        }
+    }
+}
+
+// Supprimer les états qui ne sont pas atteignables
+void supprimerEtatsInatteignables(Automate *automate) {
+    int *etatsAtteignables = (int *)calloc(automate->nb_etats, sizeof(int));
+    marquerEtatsAtteignables(automate, automate->etat_initial, etatsAtteignables);
+
+    // Créer un nouvel automate pour stocker les états atteignables
+    Automate nouvelAutomate;
+    initialiserAutomate(&nouvelAutomate);
+
+    // Copier les états atteignables dans le nouvel automate
+    for (int i = 0; i < automate->nb_etats; i++) {
+        if (etatsAtteignables[i]) {
+            ajouterEtat(&nouvelAutomate, automate->etats[i].etat, automate->etats[i].est_initial, automate->etats[i].est_final);
+        }
+    }
+
+    // Copier les transitions liées aux états atteignables
+    for (int i = 0; i < automate->nb_transitions; i++) {
+        if (etatsAtteignables[automate->transitions[i].etat_depuis] && etatsAtteignables[automate->transitions[i].etat_vers]) {
+            ajouterTransition(&nouvelAutomate, automate->transitions[i].etat_depuis, automate->transitions[i].symbole_entree, automate->transitions[i].etat_vers);
+        }
+    }
+
+    // Libérer l'ancien automate et remplacer par le nouvel
+    supprimerAutomate(automate);
+    *automate = nouvelAutomate;
+
+    free(etatsAtteignables);
+}
+
+//-------------------------------------step-2----------------------------------------
+
+// Prototype pour une fonction utilitaire
+int groupeDeLEtat(int etat, int **groupes, int nbGroupes, int nbEtats);
+
+void identifierEtatsIndistinguables(Automate *automate, int ***groupesRetour, int *nbGroupesRetour) {
+    int nbGroupes = 2;  // Commence avec deux groupes : finaux et non finaux
+    int **groupes = (int **)malloc(nbGroupes * sizeof(int *));
+    if (groupes == NULL) {
+        fprintf(stderr, "Erreur d'allocation mémoire pour les groupes.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int i, j, k, changement, groupeEtat;
+
+    // Initialisation des groupes
+    for (i = 0; i < nbGroupes; i++) {
+        groupes[i] = (int *)calloc(automate->nb_etats, sizeof(int));
+        if (groupes[i] == NULL) {
+            fprintf(stderr, "Erreur d'allocation mémoire pour groupes[%d].\n", i);
+            // Libérer la mémoire allouée précédemment
+            for (int idx = 0; idx < i; idx++) {
+                free(groupes[idx]);
+            }
+            free(groupes);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    // Assigner chaque état à un groupe initial
+    for (i = 0; i < automate->nb_etats; i++) {
+        if (estEtatFinal(automate, automate->etats[i].etat)) {
+            groupes[0][i] = 1;  // Groupe des états finaux
+        } else {
+            groupes[1][i] = 1;  // Groupe des états non finaux
+        }
+    }
+
+    // Répéter jusqu'à ce qu'il n'y ait plus de changement
+    do {
+        changement = 0;
+        for (i = 0; i < automate->nb_etats; i++) {
+            for (j = 0; j < automate->nb_symboles; j++) {
+                groupeEtat = groupeDeLEtat(i, groupes, nbGroupes, automate->nb_etats);
+                for (k = 0; k < automate->nb_transitions; k++) {
+                    if (automate->transitions[k].etat_depuis == i && automate->transitions[k].symbole_entree == automate->symboles[j].symbole) {
+                        int etatVers = automate->transitions[k].etat_vers;
+                        int groupeEtatVers = groupeDeLEtat(etatVers, groupes, nbGroupes, automate->nb_etats);
+                        if (groupeEtat != groupeEtatVers) {
+                            // Créer un nouveau groupe car il y a une différence
+                            int **nouveauxGroupes = (int **)realloc(groupes, (nbGroupes + 1) * sizeof(int *));
+                            if (!nouveauxGroupes) {
+                                // Gérer l'erreur de réallocation
+                                for (int idx = 0; idx < nbGroupes; idx++) {
+                                    free(groupes[idx]);
+                                }
+                                free(groupes);
+                                fprintf(stderr, "Erreur de reallocation de memoire pour nouveauxGroupes.\n");
+                                exit(EXIT_FAILURE);
+                            }
+                            groupes = nouveauxGroupes;
+                            groupes[nbGroupes] = (int *)calloc(automate->nb_etats, sizeof(int));
+                            if (groupes[nbGroupes] == NULL) {
+                                // Gérer l'erreur de mémoire
+                                for (int idx = 0; idx <= nbGroupes; idx++) {
+                                    free(groupes[idx]);
+                                }
+                                free(groupes);
+                                fprintf(stderr, "Erreur d'allocation mémoire pour groupes[%d].\n", nbGroupes);
+                                exit(EXIT_FAILURE);
+                            }
+                            groupes[nbGroupes][i] = 1;
+                            nbGroupes++;
+                            changement = 1;
+                            break;
+                        }
+                    }
+                }
+                if (changement) break;
+            }
+            if (changement) break;
+        }
+    } while (changement);
+
+    *groupesRetour = groupes;
+    *nbGroupesRetour = nbGroupes;
+}
+
+// Fonction utilitaire pour trouver le groupe d'un état
+int groupeDeLEtat(int etat, int **groupes, int nbGroupes, int nbEtats) {
+    for (int i = 0; i < nbGroupes; i++) {
+        if (groupes[i][etat] == 1) {
+            return i;
+        }
+    }
+    return -1;  // En cas d'erreur
+}
+
+//--------------------------------------------------step-3--------------------------------------
+void fusionnerEtatsIndistinguables(Automate *automate, int **groupes, int nbGroupes) {
+    Automate nouvelAutomate;
+    initialiserAutomate(&nouvelAutomate);
+
+    // Pour chaque groupe, choisir un état représentant
+    for (int i = 0; i < nbGroupes; i++) {
+        for (int j = 0; j < automate->nb_etats; j++) {
+            if (groupes[i][j] == 1) {
+                // Ajouter l'état représentant pour ce groupe dans le nouvel automate
+                ajouterEtat(&nouvelAutomate, j, automate->etats[j].est_initial, automate->etats[j].est_final);
+                break;  // Ajouter seulement le premier état du groupe
+            }
+        }
+    }
+
+    // Mettre à jour les transitions
+    for (int i = 0; i < automate->nb_transitions; i++) {
+        int etatDepuisGroupe = groupeDeLEtat(automate->transitions[i].etat_depuis, groupes, nbGroupes, automate->nb_etats);
+        int etatVersGroupe = groupeDeLEtat(automate->transitions[i].etat_vers, groupes, nbGroupes, automate->nb_etats);
+        ajouterTransition(&nouvelAutomate, etatDepuisGroupe, automate->transitions[i].symbole_entree, etatVersGroupe);
+    }
+
+    // Remplacer l'ancien automate par le nouvel
+    supprimerAutomate(automate);
+    *automate = nouvelAutomate;
+}
+
+
+
+void rendreAutomateMinimal(Automate *automate) {
+    printf("Suppression des états inatteignables...\n");
+    supprimerEtatsInatteignables(automate);
+    
+    printf("Identification des états indistinguables...\n");
+    int **groupes;
+    int nbGroupes;
+    identifierEtatsIndistinguables(automate, &groupes, &nbGroupes);
+
+    printf("Fusion des états indistinguables...\n");
+    fusionnerEtatsIndistinguables(automate, groupes, nbGroupes);
+
+    printf("Nettoyage...\n");
+    for (int i = 0; i < nbGroupes; i++) {
+        free(groupes[i]);
+    }
+    free(groupes);
+
+    printf("Automate minimal rendu.\n");
+}
+

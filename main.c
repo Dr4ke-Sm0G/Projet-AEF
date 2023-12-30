@@ -95,7 +95,9 @@ int main()
                 printf("\n Le mot est rejete.\n");
             }
             break;
-
+        case 12:
+            printf("appel-OK\n");
+            rendreAutomateMinimal(&automate);
         default:
             printf("Choix invalide. Veuillez choisir un nombre valide.\n");
             break;
