@@ -51,4 +51,15 @@ int accepterMot(Automate *automate, const char *mot);
 
 void modifierTransition(Automate *automate);
 
+
+
+// --------------------------FONTIONS-DE-L'ETAPE-12------------------------------------------------------------
+
+void marquerEtatsAtteignables(Automate *automate, int etat_actuel, int *etatsAtteignables);
+void supprimerEtatsInatteignables(Automate *automate);
+void identifierEtatsIndistinguables(Automate *automate, int ***groupesRetour, int *nbGroupesRetour);
+void fusionnerEtatsIndistinguables(Automate *automate, int **groupes, int nbGroupes);
+int groupeDeLEtat(int etat, int **groupes, int nbGroupes, int nbEtats);
+void rendreAutomateMinimal(Automate *automate);
+
 #endif // AUTOMATE_H_INCLUDED
