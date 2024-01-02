@@ -601,25 +601,34 @@ void sauvegarderAutomate(Automate *automate)
     fprintf(fichier, "\n");
 
     // Ecrire les Etats initiaux
+    int premierInitial = 1;
     for (int i = 0; i < automate->nb_etats; i++)
     {
         if (automate->etats[i].est_initial)
         {
+            if (!premierInitial)
+            {
+                // Si ce n'est pas le premier état initial, ajoutez une virgule avant l'identifiant de l'état
+                fprintf(fichier, ",");
+            }
             fprintf(fichier, "%d", automate->etats[i].etat);
-        }
-        if (i < automate->etats[i].est_initial - 1)
-        {
-            fprintf(fichier, ",");
+            premierInitial = 0;
         }
     }
     fprintf(fichier, "\n");
-
+    int premierFinal = 1;
     // Ecrire les Etats finaux
     for (int i = 0; i < automate->nb_etats; i++)
     {
         if (automate->etats[i].est_final)
         {
-            fprintf(fichier, "%d,", automate->etats[i].etat);
+            if (!premierFinal)
+            {
+                // Si ce n'est pas le premier état initial, ajoutez une virgule avant l'identifiant de l'état
+                fprintf(fichier, ",");
+            }
+            fprintf(fichier, "%d", automate->etats[i].etat);
+            premierFinal = 0;
         }
     }
     fprintf(fichier, "\n");
@@ -914,14 +923,15 @@ void rendreAutomateDeterministe(Automate *automate)
 //     }
 //     return expression;
 // }
+
 void completerAutomate(Automate *automate)
 {
-    // Inverser les états finaux et non finaux
     for (int i = 0; i < automate->nb_etats; ++i)
     {
-        automate->etats[i].est_final = !automate->etats[i].est_final;
+        automate->etats[i].est_final = !automate->etats[i].est_final; // Inverse l'état final
     }
 }
+
 void miroirAutomate(Automate *automate)
 {
     // Echanger les etats initiaux et finaux
@@ -940,10 +950,8 @@ void miroirAutomate(Automate *automate)
     }
 }
 
-void produitAutomates(Automate *automateA, Automate *automateB, Automate *produit)
+void produitAutomates(Automate *automateA, Automate *automateB)
 {
-    // Initialiser l'automate produit
-    initialiserAutomate(produit);
 
     char nom_fichier[100];
     printf("Entrez le nom du fichier de sauvegarde : ");
@@ -961,7 +969,7 @@ void produitAutomates(Automate *automateA, Automate *automateB, Automate *produi
     {
         for (int j = 0; j < automateB->nb_etats; ++j)
         {
-            
+
             {
                 fprintf(fichier, "(%d,%d)", automateA->etats[i].etat, automateB->etats[j].etat);
                 if (i < automateA->nb_etats - 1 && j < automateB->nb_etats - 1)
@@ -969,7 +977,6 @@ void produitAutomates(Automate *automateA, Automate *automateB, Automate *produi
                     fprintf(fichier, ",");
                 }
             }
-            
         }
     }
     fprintf(fichier, "\n");
@@ -989,9 +996,9 @@ void produitAutomates(Automate *automateA, Automate *automateB, Automate *produi
             }
         }
     }
-        fprintf(fichier, "\n");
+    fprintf(fichier, "\n");
 
-        // Ecrire les Etats finaux
+    // Ecrire les Etats finaux
     for (int i = 0; i < automateA->nb_etats; ++i)
     {
         for (int j = 0; j < automateB->nb_etats; ++j)
@@ -1006,28 +1013,59 @@ void produitAutomates(Automate *automateA, Automate *automateB, Automate *produi
             }
         }
     }
-        fprintf(fichier, "\n");
+    fprintf(fichier, "\n");
 
-        // Ecrire les transitions
-        for (int i = 0; i < automateA->nb_transitions; i++){
-            for(int j=0; j<automateB->nb_transitions; j++){
-                if (automateA->transitions[i].symbole_entree == automateB->transitions[j].symbole_entree) {
-                    fprintf(fichier, "(%d,%d),%c,(%d,%d)\n",
-                    automateA->transitions[i].etat_depuis,
-                    automateB->transitions[j].etat_depuis,
-                    automateA->transitions[i].symbole_entree,
-                    automateA->transitions[i].etat_vers,
-                    automateB->transitions[j].etat_vers);
-                }
-
+    // Ecrire les transitions
+    for (int i = 0; i < automateA->nb_transitions; i++)
+    {
+        for (int j = 0; j < automateB->nb_transitions; j++)
+        {
+            if (automateA->transitions[i].symbole_entree == automateB->transitions[j].symbole_entree)
+            {
+                fprintf(fichier, "(%d,%d),%c,(%d,%d)\n",
+                        automateA->transitions[i].etat_depuis,
+                        automateB->transitions[j].etat_depuis,
+                        automateA->transitions[i].symbole_entree,
+                        automateA->transitions[i].etat_vers,
+                        automateB->transitions[j].etat_vers);
             }
- 
         }
+    }
 
-        fclose(fichier);
+    fclose(fichier);
+}
+void concatenerAutomates(Automate *automateA, Automate *automateB, Automate *automateC)
+{
+    // Copier les états et les transitions de l'automate A
+    for (int i = 0; i < automateA->nb_etats; ++i)
+    {
+        ajouterEtat(automateC, automateA->etats[i].etat, automateA->etats[i].est_initial, 0); // Les états finaux de A ne sont pas finaux dans le nouvel automate
+    }
+    for (int i = 0; i < automateA->nb_transitions; ++i)
+    {
+        ajouterTransition(automateC, automateA->transitions[i].etat_depuis, automateA->transitions[i].symbole_entree, automateA->transitions[i].etat_vers);
     }
 
 
+    for (int i = 0; i < automateB->nb_etats; ++i)
+    {
+        ajouterEtat(automateC, automateB->etats[i].etat, 0, automateB->etats[i].est_final); // Seuls les états finaux de B sont finaux dans le nouvel automate
+
+    }
+    for (int i = 0; i < automateB->nb_transitions; ++i)
+    {
+        ajouterTransition(automateC, automateB->transitions[i].etat_depuis, automateB->transitions[i].symbole_entree, automateB->transitions[i].etat_vers );
+    }
+
+    // Ajouter des transitions epsilon des états finaux de A vers l'état initial de B
+    for (int i = 0; i < automateA->nb_etats; ++i)
+    {
+        if (automateA->etats[i].est_final)
+        {
+            ajouterTransition(automateC, automateA->etats[i].etat, 'ɛ', automateB->etat_initial); // EPSILON représente la transition epsilon
+        }
+    }
+}
 // Fonction pour libérer la mémoire allouée pour l'automate
 void freeAutomate(Automate *automate)
 {

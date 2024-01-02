@@ -9,7 +9,7 @@
 int main()
 {
     char nomFichierA[100], nomFichierB[100];
-    Automate automateA, automateB, produit;
+    Automate automateA, automateB, automateP;
     TableauAutomates tableau;
     int choice;
     char nom_fichier[100];
@@ -175,6 +175,11 @@ int main()
             case 0:
                 return 0;
             case 1:
+                printf("\n -- Choix de l'automate --\n");
+                afficherNbrAutomate(&tab);
+                printf("\n Donner le numero de l'automate ");
+                scanf("%d", &id);
+                automate = rechercherAutomate(&tab, id);
                 completerAutomate(&automate);
                 printf("Voulez-vous sauvegarder l'automate complemente ? (O/N) : ");
                 char reponse[5];
@@ -186,6 +191,11 @@ int main()
                 break;
 
             case 2:
+                printf("\n -- Choix de l'automate --\n");
+                afficherNbrAutomate(&tab);
+                printf("\n Donner le numero de l'automate ");
+                scanf("%d", &id);
+                automate = rechercherAutomate(&tab, id);
                 miroirAutomate(&automate);
                 printf("Voulez-vous sauvegarder l'automate complemente ? (O/N) : ");
                 scanf("%s", reponse);
@@ -206,13 +216,31 @@ int main()
                 automateB = initialiserAutomateDepuisFichier(nomFichierB);
                 ajouterAutomateTab(&tab, automateB);
                 // Initialiser l'automate produit
-                initialiserAutomate(&produit);
+                initialiserAutomate(&automateP);
                 // Créer le produit des automates A et B
-                produitAutomates(&automateA, &automateB, &produit);
-                
-                break;
-            case 4 :
+                produitAutomates(&automateA, &automateB);
 
+                break;
+            case 4:
+                printf("Entrez le nom du fichier pour l'automate A : ");
+                scanf("%s", nomFichierA);
+                automateA = initialiserAutomateDepuisFichier(nomFichierA);
+                ajouterAutomateTab(&tab, automateA);
+                printf("Entrez le nom du fichier pour l'automate B : ");
+                scanf("%s", nomFichierB);
+                automateB = initialiserAutomateDepuisFichier(nomFichierB);
+                ajouterAutomateTab(&tab, automateB);
+                 // Initialiser l'automate produit
+                initialiserAutomate(&automateP);
+                // Créer le produit des automates A et B
+                concatenerAutomates(&automateA, &automateB, &automateP);
+                printf("Voulez-vous sauvegarder l'automate complemente ? (O/N) : ");
+                
+                scanf("%s", reponse);
+                if (strcmp(reponse, "O") == 0)
+                {
+                    sauvegarderAutomate(&automateP);
+                }
                 break;
             }
 
