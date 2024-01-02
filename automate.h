@@ -68,7 +68,7 @@ void rendreAutomateDeterministe(Automate *automate);
 
 void completerAutomate(Automate *automate);
 void miroirAutomate(Automate *automate);
-void produitAutomates(Automate *automateA, Automate *automateB);
-
+void produitAutomates(Automate *automateA, Automate *automateB, Automate *produit);
+void concatenerAutomates(Automate *automateA, Automate *automateB, Automate *automateC);
 
 #endif // AUTOMATE_H_INCLUDED
