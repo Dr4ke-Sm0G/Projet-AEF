@@ -32,7 +32,7 @@ Le programme fonctionne en mode console. Suivez les instructions à l'écran pou
 
 ## Auteur
 
-- CHAHID Yassine
+- Yassine CHAHID
 - Ahmed MAAOUIA
 - Haroun JOUDI
 - Aymane Outimjicht
