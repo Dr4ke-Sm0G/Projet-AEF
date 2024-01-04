@@ -6,12 +6,14 @@
 #include <string.h>
 #include <unistd.h>
 #include <windows.h>
+#include <stdbool.h>
 
 #include "etat.h"
 #include "symbole.h"
 #include "transition.h"
 
 typedef struct {
+    int id;
     Etat *etats;
     int nb_etats;
     int etat_initial;
@@ -21,10 +23,13 @@ typedef struct {
     int nb_symboles;
     Transition *transitions;
     int nb_transitions;
+    char* expression_actuelle;
+    int etat_courant;
 } Automate;
 
 void menuPrincipal();
 void menuManipuler();
+void menuOperations();
 
 void initialiserAutomate(Automate *automate);
 
@@ -50,10 +55,23 @@ int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree
 int accepterMot(Automate *automate, const char *mot);
 
 void modifierTransition(Automate *automate);
+bool estAutomateComplet(Automate *automate);
+void rendreAutomateComplet(Automate *automate);
+
+bool estAutomateDeterministe(Automate *automate);
+void rendreAutomateDeterministe(Automate *automate);
+
+void completerAutomate(Automate *automate);
+void miroirAutomate(Automate *automate);
+void produitAutomates(Automate *automateA, Automate *automateB, Automate *produit);
+void concatenerAutomates(Automate *automateA, Automate *automateB, Automate *produit);
+char* extraireExpressionReguliere(Automate *automate);
+
 
 
 
 // --------------------------FONTIONS-DE-L'ETAPE-12------------------------------------------------------------
+
 
 void marquerEtatsAtteignables(Automate *automate, int etat_actuel, int *etatsAtteignables);
 void supprimerEtatsInatteignables(Automate *automate);

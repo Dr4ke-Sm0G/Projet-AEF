@@ -13,7 +13,7 @@ void modifierTransition(Automate *automate)
     char symbole_entree;
     Transition *transition_a_modifier;
     int choix;
-    
+
     printf("Menu de modification de transition :\n");
     printf("1. Modifier une transition\n");
     printf("2. Ajouter une nouvelle transition\n");
@@ -47,6 +47,7 @@ void modifierTransition(Automate *automate)
             printf("3- Modifier l'etat d'arrivee\n");
             printf("4- Supprimer la transition\n");
             printf("5- Quitter\n");
+            printf("Entrez votre choix : ");
             scanf("%d", &choix);
         } while (choix < 1 || choix > 5);
         switch (choix)
@@ -64,7 +65,7 @@ void modifierTransition(Automate *automate)
             scanf("%d", &transition_a_modifier->etat_vers);
             break;
         case 4:
-            // Supprimer la transition en la remplaçant par la derniere transition de l'automate
+            // Supprimer la transition en la remplacant par la derniere transition de l'automate
             *transition_a_modifier = automate->transitions[automate->nb_transitions - 1];
             automate->nb_transitions--;
             printf("La transition a ete supprimee.\n");
@@ -75,7 +76,7 @@ void modifierTransition(Automate *automate)
             break;
         }
         break;
-        
+
     case 2: {
             // Ajouter une nouvelle transition
             int etat_depuis, etat_vers;
@@ -89,7 +90,6 @@ void modifierTransition(Automate *automate)
             scanf("%d", &etat_vers);
 
             ajouterTransition(automate, etat_depuis, symbole_entree, etat_vers);
-
             printf("Nouvelle transition ajoutee avec succes.\n");
             break;
         }
@@ -99,5 +99,14 @@ void modifierTransition(Automate *automate)
             printf("Choix invalide. Veuillez choisir une option valide.\n");
             break;
     }
+     // Demander a l'utilisateur s'il souhaite sauvegarder
+    printf("Voulez-vous sauvegarder les modifications ? (O/N) ");
+    scanf(" %c", &choix);
 
+    if (choix == 'O') {
+        // Appeler la fonction de sauvegarde ici
+        sauvegarderAutomate(automate);
+        printf("Automate sauvegarde avec succes.\n");
+    }
+    else return;
 }
