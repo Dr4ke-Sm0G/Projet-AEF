@@ -1,7 +1,7 @@
 #include "automate.h"
 #include "tabAutomates.h"
 #include <stdbool.h>
-
+#define TAILLE_MAX 1024
 void menuPrincipal()
 {
     printf("--------------------------------------------------------\n");
@@ -827,102 +827,52 @@ void rendreAutomateDeterministe(Automate *automate)
         }
     }
 }
-// char* mon_strdup(const char* s) {
-//     if (s == NULL) {
-//         return NULL;
-//     }
+ char* extraireExpressionReguliere(Automate *automate){
 
-//     // Allouer de la mémoire pour la nouvelle chaîne
-//     char* copie = malloc(strlen(s) + 1); // +1 pour le caractère nul
-//     if (copie == NULL) {
-//         return NULL; // Échec d'allocation de mémoire
-//     }
+    char** equations = malloc(automate->nb_etats * sizeof(char*));
 
-//     // Copier la chaîne dans la nouvelle mémoire
-//     strcpy(copie, s);
-//     return copie;
-// }
+ for (int i = 1; i <= automate->nb_etats; i++) {
+    equations[i - 1] = malloc(TAILLE_MAX * sizeof(char));
+    sprintf(equations[i - 1], "L%d = ", i);
+    
+}
+for (int i = 0; i < automate->nb_etats; i++) {
+    printf("Equation initiale L%d : %s\n", i+1, equations[i]);
+}
 
-// char* construireExpression(Automate *automate) {
-//     if (automate->etats[automate->etat_courant].est_final) {
+    // Formulation des équations en parcourant les transitions
+for (int i = 0; i < automate->nb_transitions; i++) {
+    Transition transition = automate->transitions[i];
+    char transitionPart[20];
+    // Ajuster les indices pour commencer à 0
+    int etatDepuis = transition.etat_depuis - 1;
+    int etatVers = transition.etat_vers - 1;
+    sprintf(transitionPart, "%c.L%d + ", transition.symbole_entree, etatVers + 1); // +1 pour revenir à la numérotation d'origine
+    strcat(equations[etatDepuis], transitionPart);
+}
 
-//         return mon_strdup(automate->expression_actuelle); // Retourner l'expression actuelle si l'état est final
-//     }
+for (int i = 0; i < automate->nb_etats; i++) {
+    printf("Equation après transitions L%d : %s\n", i+1, equations[i]);
+}
 
-//     char* expression_complete = mon_strdup(""); // Initialiser une expression vide
-//     if (expression_complete == NULL) return NULL;
+for (int i = 0; i < automate->nb_etats_finaux; i++) {
+    int etatFinal = automate->etats_finaux[i] - 1;
+    strcpy(equations[etatFinal], "null");
+}
 
-//     for (int i = 0; i < automate->nb_transitions; ++i) {
-//         if (automate->transitions[i].etat_depuis == automate->etat_courant) {
-//             char symbole[2] = {automate->symboles[i].symbole, '\0'};
-
-//             // Création de la nouvelle expression avec le symbole ajouté
-//             char* nouvelle_expr = (char*)malloc(strlen(automate->expression_actuelle) + strlen(symbole) + 1);
-//             if (nouvelle_expr == NULL) {
-//                 free(expression_complete);
-//                 return NULL;
-//             }
-//             strcpy(nouvelle_expr, automate->expression_actuelle);
-//             strcat(nouvelle_expr, symbole);
-
-//             int temp_etat_courant = automate->etat_courant;
-//             automate->expression_actuelle = nouvelle_expr;
-//             automate->etat_courant = automate->transitions[i].etat_vers;
-
-//             char* expression_partielle = construireExpression(automate);
-//             automate->etat_courant = temp_etat_courant;
-//             free(nouvelle_expr);
-
-//             if (expression_partielle != NULL) {
-//                 // Concaténation de l'expression partielle à l'expression complète
-//                 char* temp = expression_complete;
-//                 expression_complete = (char*)malloc(strlen(temp) + strlen(expression_partielle) + 1);
-//                 if (expression_complete == NULL) {
-//                     free(temp);
-//                     free(expression_partielle);
-//                     return NULL;
-//                 }
-//                 strcpy(expression_complete, temp);
-//                 strcat(expression_complete, expression_partielle);
-
-//                 free(temp);
-//                 free(expression_partielle);
-//             }
-
-//             if (expression_complete == NULL) return NULL;
-//         }
-//     }
-//     return expression_complete;
-// }
-
-// char* extraireExpressionsRegulieres(Automate* automate) {
-//     char* expression = mon_strdup(""); // Initialiser l'expression globale
-//     if (expression == NULL) return NULL;
-
-//     for (int i = 0; i < automate->nb_etats; ++i) {
-//         if (automate->etats[i].est_initial) {
-//             automate->etat_courant = i; // Utiliser l'état initial actuel
-//             char* expression_partielle = construireExpression(automate);
-
-//             // Concaténation de l'expression partielle à l'expression globale
-//             if (expression_partielle != NULL) {
-//                 char* temp = expression;
-//                 expression = (char*)malloc(strlen(temp) + strlen(expression_partielle) + 1);
-//                 if (expression == NULL) {
-//                     free(temp);
-//                     free(expression_partielle);
-//                     return NULL;
-//                 }
-//                 strcpy(expression, temp);
-//                 strcat(expression, expression_partielle);
-
-//                 free(temp);
-//                 free(expression_partielle);
-//             }
-//         }
-//     }
-//     return expression;
-// }
+for (int i = 0; i < automate->nb_etats; i++) {
+    printf("Equation finale L%d : %s\n", i+1, equations[i]);
+}
+    // Affichage des équations
+    for (int i = 0; i < automate->nb_etats; i++) {
+        printf("%s\n", equations[i]);
+    }
+    // Libération de la mémoire
+    for (int i = 0; i < automate->nb_etats; i++) {
+        free(equations[i]);
+    }
+    free(equations);
+}
 
 void completerAutomate(Automate *automate)
 {
@@ -949,91 +899,6 @@ void miroirAutomate(Automate *automate)
         automate->transitions[i].etat_vers = temp;
     }
 }
-
-// void produitAutomates(Automate *automateA, Automate *automateB)
-// {
-
-//     char nom_fichier[100];
-//     printf("Entrez le nom du fichier de sauvegarde : ");
-//     scanf("%s", nom_fichier);
-
-//     FILE *fichier = fopen(nom_fichier, "w");
-//     if (fichier == NULL)
-//     {
-//         printf("Erreur lors de l'ouverture du fichier pour la sauvegarde.\n");
-//         return;
-//     }
-
-//     // Ecrire les Etats de l'automate
-//     for (int i = 0; i < automateA->nb_etats; ++i)
-//     {
-//         for (int j = 0; j < automateB->nb_etats; ++j)
-//         {
-
-//             {
-//                 fprintf(fichier, "(%d,%d)", automateA->etats[i].etat, automateB->etats[j].etat);
-//                 if (i < automateA->nb_etats - 1 && j < automateB->nb_etats - 1)
-//                 {
-//                     fprintf(fichier, ",");
-//                 }
-//             }
-//         }
-//     }
-//     fprintf(fichier, "\n");
-
-//     // Ecrire les Etats initiaux
-//     for (int i = 0; i < automateA->nb_etats; ++i)
-//     {
-//         for (int j = 0; j < automateB->nb_etats; ++j)
-//         {
-//             if (automateA->etats[i].est_initial && automateB->etats[j].est_initial)
-//             {
-//                 fprintf(fichier, "(%d,%d)", automateA->etats[i].etat, automateB->etats[j].etat);
-//                 if (i < automateA->nb_etats - 1 && j < automateB->nb_etats - 1)
-//                 {
-//                     fprintf(fichier, ",");
-//                 }
-//             }
-//         }
-//     }
-//     fprintf(fichier, "\n");
-
-//     // Ecrire les Etats finaux
-//     for (int i = 0; i < automateA->nb_etats; ++i)
-//     {
-//         for (int j = 0; j < automateB->nb_etats; ++j)
-//         {
-//             if (automateA->etats[i].est_final && automateB->etats[j].est_final)
-//             {
-//                 fprintf(fichier, "(%d,%d)", automateA->etats[i].etat, automateB->etats[j].etat);
-//                 if (i < automateA->nb_etats - 1 && j < automateB->nb_etats - 1)
-//                 {
-//                     fprintf(fichier, ",");
-//                 }
-//             }
-//         }
-//     }
-//     fprintf(fichier, "\n");
-
-//     // Ecrire les transitions
-//     for (int i = 0; i < automateA->nb_transitions; i++)
-//     {
-//         for (int j = 0; j < automateB->nb_transitions; j++)
-//         {
-//             if (automateA->transitions[i].symbole_entree == automateB->transitions[j].symbole_entree)
-//             {
-//                 fprintf(fichier, "(%d,%d),%c,(%d,%d)\n",
-//                         automateA->transitions[i].etat_depuis,
-//                         automateB->transitions[j].etat_depuis,
-//                         automateA->transitions[i].symbole_entree,
-//                         automateA->transitions[i].etat_vers,
-//                         automateB->transitions[j].etat_vers);
-//             }
-//         }
-//     }
-
-//     fclose(fichier);
-// }
 
 int coderNouvelEtat(int etatA, int etatB)
 {
@@ -1107,6 +972,7 @@ void concatenerAutomates(Automate *automateA, Automate *automateB, Automate *aut
         ajouterTransition(automateC, automateB->transitions[i].etat_depuis, automateB->transitions[i].symbole_entree, automateB->transitions[i].etat_vers);
     }
 }
+
 // Fonction pour libérer la mémoire allouée pour l'automate
 void freeAutomate(Automate *automate)
 {

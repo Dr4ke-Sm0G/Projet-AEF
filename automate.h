@@ -63,8 +63,9 @@ bool estAutomateDeterministe(Automate *automate);
 void rendreAutomateDeterministe(Automate *automate);
 
 
-// char* construireExpression(Automate *automate);
-// char* extraireExpressionsRegulieres(Automate *automate);
+char* extraireExpressionReguliere(Automate *automate);
+char* extraireExpressionRegulieres(Automate *automate);
+
 
 void completerAutomate(Automate *automate);
 void miroirAutomate(Automate *automate);

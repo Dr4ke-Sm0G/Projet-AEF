@@ -18,7 +18,7 @@ int main()
     TableauAutomates tab;
     initialiserTableauAutomates(&tab);
     int id;
-    char *expressionReguliere;
+    char *expression;
 
     while (1)
     {
@@ -219,7 +219,7 @@ int main()
                 // Créer le produit des automates A et B
                 produitAutomates(&automateA, &automateB, &produit);
                 printf("Voulez-vous sauvegarder l'automate complemente ? (O/N) : ");
-                
+
                 scanf("%s", reponse);
                 if (strcmp(reponse, "O") == 0)
                 {
@@ -241,7 +241,7 @@ int main()
                 // Créer le produit des automates A et B
                 concatenerAutomates(&automateA, &automateB, &produit);
                 printf("Voulez-vous sauvegarder l'automate complemente ? (O/N) : ");
-                
+
                 scanf("%s", reponse);
                 if (strcmp(reponse, "O") == 0)
                 {
@@ -255,11 +255,12 @@ int main()
             printf("Choix invalide. Veuillez choisir un nombre valide.\n");
             break;
         case 8:
-
-            // expressionReguliere = extraireExpressionsRegulieres(&automate);
-            // printf("Expression reguliere extraite : %s\n", expressionReguliere);
-            // free(expressionReguliere);
-
+            printf("\n -- Choix de l'automate --\n");
+            afficherNbrAutomate(&tab);
+            printf("\n Donner le numero de l'automate");
+            scanf("%d", &id);
+            automate = rechercherAutomate(&tab, id);
+            extraireExpressionReguliere(&automate);
             break;
         }
     }
