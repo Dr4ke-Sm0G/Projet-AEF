@@ -39,7 +39,7 @@ Le programme fonctionne en mode console. Suivez les instructions à l'écran pou
 - Naoufal Berquecha
 
 ## Remerciements
-**
+
 Un grand merci à la professeure Zaouche Djaouida pour nous avoir confié ce projet. Les défis qu'il présentait nous ont permis de mieux maîtriser notre façon de programmer et d'approfondir notre compréhension du langage C. Ce projet a été une opportunité précieuse d'apprentissage et de développement de nos compétences en programmation.
-**
+
 
