@@ -55,21 +55,29 @@ int effectuerTransition(Automate *automate, int etat_actuel, char symbole_entree
 int accepterMot(Automate *automate, const char *mot);
 
 void modifierTransition(Automate *automate);
-
 bool estAutomateComplet(Automate *automate);
 void rendreAutomateComplet(Automate *automate);
 
 bool estAutomateDeterministe(Automate *automate);
 void rendreAutomateDeterministe(Automate *automate);
 
-
-char* extraireExpressionReguliere(Automate *automate);
-char* extraireExpressionRegulieres(Automate *automate);
-
-
 void completerAutomate(Automate *automate);
 void miroirAutomate(Automate *automate);
 void produitAutomates(Automate *automateA, Automate *automateB, Automate *produit);
-void concatenerAutomates(Automate *automateA, Automate *automateB, Automate *automateC);
+void concatenerAutomates(Automate *automateA, Automate *automateB, Automate *produit);
+char* extraireExpressionReguliere(Automate *automate);
+
+
+
+
+// --------------------------FONTIONS-DE-L'ETAPE-12------------------------------------------------------------
+
+
+void marquerEtatsAtteignables(Automate *automate, int etat_actuel, int *etatsAtteignables);
+void supprimerEtatsInatteignables(Automate *automate);
+void identifierEtatsIndistinguables(Automate *automate, int ***groupesRetour, int *nbGroupesRetour);
+void fusionnerEtatsIndistinguables(Automate *automate, int **groupes, int nbGroupes);
+int groupeDeLEtat(int etat, int **groupes, int nbGroupes, int nbEtats);
+void rendreAutomateMinimal(Automate *automate);
 
 #endif // AUTOMATE_H_INCLUDED

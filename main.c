@@ -106,7 +106,7 @@ int main()
                 printf("\n Le mot est rejete.\n");
             }
             break;
-
+        
         case 3:
             printf("\n -- Choix de l'automate --\n");
             afficherNbrAutomate(&tab);
@@ -262,6 +262,9 @@ int main()
             automate = rechercherAutomate(&tab, id);
             extraireExpressionReguliere(&automate);
             break;
+        case 12:
+            printf("appel-OK\n");
+            rendreAutomateMinimal(&automate);
         }
     }
 
